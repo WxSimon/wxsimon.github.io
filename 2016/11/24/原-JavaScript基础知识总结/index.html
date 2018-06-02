@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/simle.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/simle.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaWeb,基础,Java," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Simon" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="JavaScript基础知识 alert()：弹出窗口  document.write(“”):将值直接显示在页面上面（包括heml代码）   1.Js 类型var string 2.数组定义一：var arr=[1,2,3]; 二：var arr = new Array(3):代表数组的长度 arr[0]=””;arr[1]=””;arr[2]=””; 三：var arr = new array">
+<meta name="keywords" content="JavaWeb,基础,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript基础知识总结">
+<meta property="og:url" content="http://simonxin.top/2016/11/24/原-JavaScript基础知识总结/index.html">
+<meta property="og:site_name" content="Simon">
+<meta property="og:description" content="JavaScript基础知识 alert()：弹出窗口  document.write(“”):将值直接显示在页面上面（包括heml代码）   1.Js 类型var string 2.数组定义一：var arr=[1,2,3]; 二：var arr = new Array(3):代表数组的长度 arr[0]=””;arr[1]=””;arr[2]=””; 三：var arr = new array">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-05-08T11:15:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript基础知识总结">
+<meta name="twitter:description" content="JavaScript基础知识 alert()：弹出窗口  document.write(“”):将值直接显示在页面上面（包括heml代码）   1.Js 类型var string 2.数组定义一：var arr=[1,2,3]; 二：var arr = new Array(3):代表数组的长度 arr[0]=””;arr[1]=””;arr[2]=””; 三：var arr = new array">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://simonxin.top/2016/11/24/原-JavaScript基础知识总结/"/>
+
+
+
+
+
+  <title>JavaScript基础知识总结 | Simon</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?35f898c17da99c8db38cd1dc0eefffb7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-wiki">
+          <a href="/wiki/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-wikipedia-w"></i> <br />
+            
+            wiki
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://simonxin.top/2016/11/24/原-JavaScript基础知识总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JavaScript基础知识总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-24T22:10:14+08:00">
+                2016-11-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaWeb/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaWeb</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="JavaScript基础知识"><a href="#JavaScript基础知识" class="headerlink" title="JavaScript基础知识"></a><font color="#9AD6E6">JavaScript基础知识</font></h3><ul>
+<li><p>alert()：弹出窗口</p>
+</li>
+<li><p>document.write(“”):将值直接显示在页面上面（包括heml代码）</p>
+</li>
+</ul>
+<h4 id="1-Js-类型"><a href="#1-Js-类型" class="headerlink" title="1.Js 类型"></a>1.Js 类型</h4><p>var string</p>
+<h4 id="2-数组定义"><a href="#2-数组定义" class="headerlink" title="2.数组定义"></a>2.数组定义</h4><p>一：var arr=[1,2,3];</p>
+<p>二：var arr = new Array(3):代表数组的长度 arr[0]=””;arr[1]=””;arr[2]=””;</p>
+<p>三：var arr = new array[1,2,3]代表数组中的值</p>
+<p>length:数组长度<br><a id="more"></a></p>
+<h4 id="3-javascript中关于string的方法"><a href="#3-javascript中关于string的方法" class="headerlink" title="3.javascript中关于string的方法"></a>3.javascript中关于string的方法</h4><ul>
+<li><p><font color="#3CA9EE" size="5">bold</font>:将字体加黑</p>
+</li>
+<li><p><font color="#3CA9EE" size="5">fontcolor</font>:字体颜色</p>
+</li>
+<li><p><font color="#3CA9EE" size="5">fontsize</font>:字体的大小数值只能是1-7</p>
+</li>
+</ul>
+<p><code>document.write(string.fontsize());</code></p>
+<ul>
+<li><font color="#3CA9EE" size="5">link</font>:将字体变为超链接</li>
+</ul>
+<p><code>&lt;font color=#3CA9EE size=&quot;5&quot;&gt;document.write(string.link(&quot;地址&quot;));</code></p>
+<ul>
+<li><p><font color="#3CA9EE" size="5">sub</font>:下标 <font color="red" size="5">sut</font>:上标</p>
+</li>
+<li><p><font color="#3CA9EE" size="5">concat</font>:字符串的连接</p>
+</li>
+</ul>
+<p><code>document.write(str1.concat(str2));</code></p>
+<ul>
+<li><font color="#3CA9EE" size="5">charAt</font>：返回指定位置的字符串</li>
+</ul>
+<p><code>document.write(string.charAt(0)); 返回字符串中第一个的位置</code></p>
+<ul>
+<li><font color="#3CA9EE" size="5">indexOf</font>：返回传入字符串的位置</li>
+</ul>
+<p><code>document.write(string.indexOf(&quot;字符&quot;));不存在时候返回-1</code></p>
+<ul>
+<li><font color="#3CA9EE" size="5">split</font>:将字符串切分</li>
+</ul>
+<p><code>document.write(string.split(&quot;-&quot;));按照-来切分一个字符串，切分成数组</code></p>
+<ul>
+<li><font color="#3CA9EE" size="5">replace</font>:替换字符串</li>
+</ul>
+<p><code>document.write（string.replace(&quot;要替换的值&quot;,&quot;替换成的值&quot;)）</code></p>
+<p><code>substr:substr(5,5) 从第五位开始截取，截取五位字符</code></p>
+<p><code>substring:substring（3,5） 从第三位截取到第五位，但是不包含第五位</code></p>
+<h4 id="4-javascript中关于array的方法"><a href="#4-javascript中关于array的方法" class="headerlink" title="4.javascript中关于array的方法"></a>4.javascript中关于array的方法</h4><ul>
+<li><p><font color="#3CA9EE" size="5"> length</font>:长度的函数</p>
+</li>
+<li><p><font color="#3CA9EE" size="5">join</font>:按照指定的字符将数组分割arr（1,2,3） arr.join（“-”） 显示的是arr（1-2-3）</p>
+</li>
+<li><p><font color="#3CA9EE" size="5">push </font>: arr.push(“你想加的数据”) 返回值为数组串的长度</p>
+</li>
+<li><p><font color="#3CA9EE" size="5"> pop</font> : 删除最后一个字符串并将之返回</p>
+</li>
+<li><p><font color="#3CA9EE" size="5">reverse</font>： 颠倒数组中的顺序 arr.reverse();</p>
+</li>
+</ul>
+<h4 id="5-javascript中Date的方法"><a href="#5-javascript中Date的方法" class="headerlink" title="5.javascript中Date的方法"></a>5.javascript中Date的方法</h4><h5 id="var-date-new-Date"><a href="#var-date-new-Date" class="headerlink" title="var date = new Date();"></a>var date = new Date();</h5><p>1.<font color="#3CA9EE" size="4">得到本地的时间是</font>: date.toLocaleString</p>
+<p>2.<font color="#3CA9EE" size="4"> 得到当前的年</font> ：date.getFullYear</p>
+<p>3.<font color="#3CA9EE" size="4"> 得到当前的月 </font> ：date.getMonth 返回的值为0-11 得到当前的值必须要加1</p>
+<p>4.<font color="#3CA9EE" size="4"> 得到当前的星期 </font>：date.getDay 返回值也为0-6 星期日返回值为0</p>
+<p>5.<font color="#3CA9EE" size="4"> 得到当前的天 </font> ：date.getDate</p>
+<p>6.<font color="#3CA9EE" size="4"> 得到当前的小时</font> ：date.hetHours</p>
+<p>7.<font color="#3CA9EE" size="4">得到当前的分钟</font> ：date.getMinutes</p>
+<p>8.<font color="#3CA9EE" size="4"> 得到当前的分钟</font> ：date.getSeconds</p>
+<p>9.<font color="#3CA9EE" size="4">获取毫秒数 </font> ：date.getTimes 返回1970年0月0日到现在的毫秒数 //应用场景：不有缓存，解决缓存</p>
+<h4 id="6-javascript中math的方法"><a href="#6-javascript中math的方法" class="headerlink" title="6.javascript中math的方法"></a>6.javascript中math的方法</h4><blockquote>
+<p>都是静态方法 都是通过<b>Math.</b>来使用</p>
+</blockquote>
+<p>1.<font color="#3CA9EE" size="4">ceil</font> : document.write(Math.ceil(m)); 向上舍入（10.4—&gt;11）</p>
+<p>2.<font color="#3CA9EE" size="4">floor</font> : document.write(Math.floor(m));向下舍入（10.4—&gt;10）</p>
+<p>3.<font color="#3CA9EE" size="4">round</font> : document.write(Math.round(m));四舍五入（10.4—&gt;10）</p>
+<p>4.<font color="#3CA9EE" size="4">random</font> ： 产生0-1之间的随机数</p>
+<blockquote>
+<font size="4">javascript中不存在函数的重载，通过其他方式模拟重载（arugument数组来重载）</font>
+</blockquote>
+<h4 id="7-javascript的Bom对象"><a href="#7-javascript的Bom对象" class="headerlink" title="7.javascript的Bom对象"></a>7.javascript的Bom对象</h4><p>1.<font color="#3CA9EE" size="4">navigator</font> ：获取浏览器的信息</p>
+<p>2.<font color="#3CA9EE" size="4">navigator.appname</font> :获取浏览器名称</p>
+<p>3.<font color="#3CA9EE" size="4">screen </font> ：浏览器屏幕信息</p>
+<p>4.<font color="#3CA9EE" size="4">location </font></p>
+<p>5.<font color="#3CA9EE" size="4">href</font> :获取请求的地址，设置url地址</p>
+<p>6.<font color="#3CA9EE" size="4">history</font></p>
+<p>7.<font color="#3CA9EE" size="4">back </font> :上一个页面</p>
+<p>8.<font color="#3CA9EE" size="4">forward</font> ：下一个页面</p>
+<h5 id="9-windows"><a href="#9-windows" class="headerlink" title="9. windows"></a>9. windows</h5><ul>
+<li><p><font color="#3CA9EE" size="4">window.alert</font> :输出弹框</p>
+</li>
+<li><p><font color="#3CA9EE" size="4">window.confirm (“显示内容”）</font> :确认提示框（点击确定返回true，取消返回false）</p>
+</li>
+<li><p><font color="#3CA9EE" size="4">window.prompt（“显示的内容”，“默认内容”） </font> :文字提示框</p>
+</li>
+<li><p><font color="#3CA9EE" size="4">window.open（链接，名字，格式）</font> ：打开一个新的窗口</p>
+</li>
+<li><p><font color="#3CA9EE" size="4">window.clouse() </font> : 关闭窗口</p>
+</li>
+<li><p><font color="#3CA9EE" size="4">window.setInterval(‘js代码’，毫秒数)</font> ：多长时间执行一次“js代码事件”(模拟定时器的效果)</p>
+</li>
+<li><p><font color="#3CA9EE" size="4">window.setT imeout(“js代码”，毫秒数)</font> : 在毫秒数之后去执行“js代码事件”（只会执行一次）</p>
+</li>
+<li><p><font color="#3CA9EE" size="4">clearInterval(传入的为Interval事件的ID)</font> : 清除setInterval的事件</p>
+</li>
+<li><p><font color="#3CA9EE" size="4">clearInterval() </font> ：清除setTimeout事件</p>
+</li>
+</ul>
+<h4 id="8-javascript的dom对象"><a href="#8-javascript的dom对象" class="headerlink" title="8.javascript的dom对象"></a>8.javascript的dom对象</h4><blockquote>
+</blockquote>
+<ul>
+<li><p>文档： 超文本标记文档</p>
+</li>
+<li><p>对象：提供属性和方法</p>
+</li>
+<li><p>模型：使用属性和方法操作的文档</p>
+</li>
+</ul>
+<h4 id="9-javascript的document方法"><a href="#9-javascript的document方法" class="headerlink" title="9.javascript的document方法"></a>9.javascript的document方法</h4><p>1. <font color="#3CA9EE" size="4">write</font> :向页面输出变量的值或者HTML代码</p>
+<p>2. <font color="#3CA9EE" size="4">getElementById</font> :通过Id来得到对象</p>
+<p>3. <font color="#3CA9EE" size="4">getElementsByName(“name的值为一样的组”)</font> :通过标签的name值得到对象，返回的是一个数组</p>
+<p>4. <font color="#3CA9EE" size="4">getElementsTagName(“标签名称”)</font> ：通过标签名称得到对象，返回也是一个数组</p>
+<p>5. 只有一个标签时，只能用ByName来获取，不能使用ByTagName获取</p>
+<p>6. <font color="#3CA9EE" size="4">opener</font>:创建窗口的窗口 var p=window.opener p得到了创建这个字窗口的窗口 在末尾添加节点：</p>
+<blockquote>
+<p>1.获取母标签getById<br><br></p>
+</blockquote>
+<blockquote>
+<p>2.创建子标签</p>
+</blockquote>
+<p>document.createElement(‘输入标签’); :创建标签<br><br></p>
+<blockquote>
+<p>3.创建所要输入的文本<br></p>
+</blockquote>
+<p>document.createTextNode(“输入文本”) :创建文本<br><br></p>
+<blockquote>
+<p>4.将文本放入标签中<br></p>
+</blockquote>
+<p>子标签.appendChild（”文本”） :将文本让入子标签中<br><br></p>
+<blockquote>
+<p>5.将子标签放入母标签中<br></p>
+</blockquote>
+<p>母标签.oppendChild(); :将子标签插入到母标签中（类似于剪切粘贴的效果）</p>
+<h4 id="10-javascript的Element对象"><a href="#10-javascript的Element对象" class="headerlink" title="10.javascript的Element对象"></a>10.javascript的Element对象</h4><p>1.<font color="#3CA9EE" size="4">input.value</font>;</p>
+<p>2.<font color="#3CA9EE" size="4">input.getAttribute(“value”)</font>; :两个效果是一样的，但是使用后者是区别关键字</p>
+<p>3.<font color="#3CA9EE" size="4">inout.setAttribute(“属性”,”属性值”)</font>; :设置属性名称和值，传入两个参数</p>
+<p>4.<font color="#3CA9EE" size="4">inout.removeAttribute(“属性”)</font> ：删除属性，但是不能删除value属性</p>
+<p>5.<font color="#3CA9EE" size="4">node:标签节点</font></p>
+<blockquote>
+<p><b>nodeType nodeName nodeValue</b></p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">fistChild </font> :获得第一个节点</p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">lastChild</font> :获得最后一个节点</p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">nextSibling</font> :子节点中的下一个同辈节点</p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">previousSibling</font> :子节点中的上一个同辈节点</p>
+</blockquote>
+<h4 id="11-javascript的Dom操作"><a href="#11-javascript的Dom操作" class="headerlink" title="11.javascript的Dom操作"></a>11.javascript的Dom操作</h4><p><font color="#3CA9EE" size="4">oppendChild();</font> :将子标签插入到母标签中（类似于剪切粘贴的效果）</p>
+<p><font color="#3CA9EE" size="4">insertBefore(新节点，旧节点)</font> :将新节点插入到旧节点之前（是在母节点的基础上插入）</p>
+<p><font color="#3CA9EE" size="4">replace(新节点，旧节点)</font> :将新节点代替旧节点（是在母节点的基础上替换）</p>
+<p><font color="#3CA9EE" size="4">cloneNode(bool类型)</font> :复制子节点子 节点.cloneNode(true);</p>
+<p><font color="#3CA9EE" size="4">removeNode(子节点)</font> :通过父节点删除子节点</p>
+<h4 id="12-javascript的innerHTML属性"><a href="#12-javascript的innerHTML属性" class="headerlink" title="12.javascript的innerHTML属性"></a>12.javascript的innerHTML属性</h4><blockquote>
+<p>1.获取文本内容<br></p>
+</blockquote>
+<p>就是直接获得标签的文本内容</p>
+<p>2.向标签中设置内容，包括html代码</p>
+<blockquote>
+<p>母节点,innerHTNL=”htnl代码”;</p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">form.submit();</font> :提交内容到服务器</p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">form.action=””;</font> :将内容提交到那个地址</p>
+</blockquote>
+<blockquote>
+<p>&lt;a href=”地址”?”内容”&gt; :使用超链接提交内容</p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">onclick</font> :鼠标点击事件</p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">onchange</font> :改变内容（select一起使用）</p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">onfocus</font> :得到焦点事件</p>
+</blockquote>
+<blockquote>
+<p><font color="#3CA9EE" size="4">onblur</font> :失去焦点事件</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaWeb/" rel="tag"># JavaWeb</a>
+          
+            <a href="/tags/基础/" rel="tag"># 基础</a>
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/24/原-XML基础知识总结/" rel="next" title="XML基础知识总结">
+                <i class="fa fa-chevron-left"></i> XML基础知识总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/29/原-Jsp-Cookie-HttpSession-EL/" rel="prev" title="Jsp_Cookie_HttpSession_EL">
+                Jsp_Cookie_HttpSession_EL <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/avatar.jpg"
+                alt="Simon" />
+            
+              <p class="site-author-name" itemprop="name">Simon</p>
+              <p class="site-description motion-element" itemprop="description">Hello World !</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wxsimon" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/simon_xin1996" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/2495174663/profile?topnav=1&wvr=6" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://my.csdn.net/qq_28466365" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/wang-xin-38-81-5/activities" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript基础知识"><span class="nav-number">1.</span> <span class="nav-text">JavaScript基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Js-类型"><span class="nav-number">1.1.</span> <span class="nav-text">1.Js 类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-数组定义"><span class="nav-number">1.2.</span> <span class="nav-text">2.数组定义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-javascript中关于string的方法"><span class="nav-number">1.3.</span> <span class="nav-text">3.javascript中关于string的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-javascript中关于array的方法"><span class="nav-number">1.4.</span> <span class="nav-text">4.javascript中关于array的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-javascript中Date的方法"><span class="nav-number">1.5.</span> <span class="nav-text">5.javascript中Date的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#var-date-new-Date"><span class="nav-number">1.5.1.</span> <span class="nav-text">var date = new Date();</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-javascript中math的方法"><span class="nav-number">1.6.</span> <span class="nav-text">6.javascript中math的方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-javascript的Bom对象"><span class="nav-number">1.7.</span> <span class="nav-text">7.javascript的Bom对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#9-windows"><span class="nav-number">1.7.1.</span> <span class="nav-text">9. windows</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-javascript的dom对象"><span class="nav-number">1.8.</span> <span class="nav-text">8.javascript的dom对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-javascript的document方法"><span class="nav-number">1.9.</span> <span class="nav-text">9.javascript的document方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-javascript的Element对象"><span class="nav-number">1.10.</span> <span class="nav-text">10.javascript的Element对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-javascript的Dom操作"><span class="nav-number">1.11.</span> <span class="nav-text">11.javascript的Dom操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-javascript的innerHTML属性"><span class="nav-number">1.12.</span> <span class="nav-text">12.javascript的innerHTML属性</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

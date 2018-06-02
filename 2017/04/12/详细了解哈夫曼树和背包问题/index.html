@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/simle.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/simle.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Simon" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="详细了解哈夫曼树和背包问题写在前面：  最近在疯狂复习数据结构和算法，虽然看完了一部完整的视频。但是转眼看看自己手中的《剑指Offer》里面还是不是很清楚。。。而且最近也突然觉得自己知识和别人比起来就是一个渣渣。各种被人家吊打。。。 这两个算法一个（哈夫曼树）是看最近视频动手实践的，一个(背包问题)是前段时间一个面试里面的题目，当时不知道这是一个系类的问题，昨天和大神聊完天之后才明白。所以乘着短暂">
+<meta property="og:type" content="article">
+<meta property="og:title" content="详细了解哈夫曼树和背包问题">
+<meta property="og:url" content="http://simonxin.top/2017/04/12/详细了解哈夫曼树和背包问题/index.html">
+<meta property="og:site_name" content="Simon">
+<meta property="og:description" content="详细了解哈夫曼树和背包问题写在前面：  最近在疯狂复习数据结构和算法，虽然看完了一部完整的视频。但是转眼看看自己手中的《剑指Offer》里面还是不是很清楚。。。而且最近也突然觉得自己知识和别人比起来就是一个渣渣。各种被人家吊打。。。 这两个算法一个（哈夫曼树）是看最近视频动手实践的，一个(背包问题)是前段时间一个面试里面的题目，当时不知道这是一个系类的问题，昨天和大神聊完天之后才明白。所以乘着短暂">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://simonxin.top/images/17.4.11/huffmanTree.jpg">
+<meta property="og:updated_time" content="2017-05-08T11:15:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="详细了解哈夫曼树和背包问题">
+<meta name="twitter:description" content="详细了解哈夫曼树和背包问题写在前面：  最近在疯狂复习数据结构和算法，虽然看完了一部完整的视频。但是转眼看看自己手中的《剑指Offer》里面还是不是很清楚。。。而且最近也突然觉得自己知识和别人比起来就是一个渣渣。各种被人家吊打。。。 这两个算法一个（哈夫曼树）是看最近视频动手实践的，一个(背包问题)是前段时间一个面试里面的题目，当时不知道这是一个系类的问题，昨天和大神聊完天之后才明白。所以乘着短暂">
+<meta name="twitter:image" content="http://simonxin.top/images/17.4.11/huffmanTree.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://simonxin.top/2017/04/12/详细了解哈夫曼树和背包问题/"/>
+
+
+
+
+
+  <title>详细了解哈夫曼树和背包问题 | Simon</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?35f898c17da99c8db38cd1dc0eefffb7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-wiki">
+          <a href="/wiki/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-wikipedia-w"></i> <br />
+            
+            wiki
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://simonxin.top/2017/04/12/详细了解哈夫曼树和背包问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">详细了解哈夫曼树和背包问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-12T14:47:16+08:00">
+                2017-04-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="详细了解哈夫曼树和背包问题"><a href="#详细了解哈夫曼树和背包问题" class="headerlink" title="详细了解哈夫曼树和背包问题"></a>详细了解哈夫曼树和背包问题</h1><p><b>写在前面</b>：</p>
+<ul>
+<li>最近在疯狂复习数据结构和算法，虽然看完了一部完整的视频。但是转眼看看自己手中的《剑指Offer》里面还是不是很清楚。。。而且最近也突然觉得自己知识和别人比起来就是一个渣渣。各种被人家吊打。。。</li>
+<li><b>这两个算法一个（哈夫曼树）是看最近视频动手实践的，一个(背包问题)是前段时间一个面试里面的题目，当时不知道这是一个系类的问题，昨天和大神聊完天之后才明白。所以乘着短暂的热情还在就记录下来</b>先从哈夫曼树开始！！<a id="more"></a>
+</li>
+</ul>
+<h3 id="1-哈夫曼树（实现基本的编码解码）"><a href="#1-哈夫曼树（实现基本的编码解码）" class="headerlink" title="1.哈夫曼树（实现基本的编码解码）"></a>1.哈夫曼树（实现基本的编码解码）</h3><ul>
+<li><p>简单定义：<br>   给定n个权值作为n个叶子结点，构造一棵二叉树，若带权路径长度达到最小，称这样的二叉树为最优二叉树，也称为哈夫曼树(Huffman Tree)。哈夫曼树是带权路径长度最短的树，权值较大的结点离根较近。</p>
+<p>  复杂的文字定义我觉得以后肯定不会看。。所以直接来一张哈夫曼树的构造过程简单明了。。<br>  <img src="/images/17.4.11/huffmanTree.jpg" alt=""></p>
+</li>
+</ul>
+<h4 id="1-模型构造"><a href="#1-模型构造" class="headerlink" title="1.模型构造"></a>1.模型构造</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 节点类</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Node</span>&gt; </span>&#123;</span><br><span class="line">		String data;</span><br><span class="line">		<span class="keyword">double</span> weight;</span><br><span class="line">		Node leftChild;</span><br><span class="line">		Node rightChild;</span><br><span class="line">		Node parent;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLeftChild</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> parent != <span class="keyword">null</span> &amp;&amp; <span class="keyword">this</span> == parent.leftChild;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(String data, <span class="keyword">double</span> weight)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.data = data;</span><br><span class="line">			<span class="keyword">this</span>.weight = weight;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"Node [data="</span> + data + <span class="string">", weight="</span> + weight + <span class="string">"]"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//队列排序依据</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Node o)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> (<span class="keyword">int</span>) (weight - o.weight);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> data.length() == <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>包含属性:<br>| 属性 | 定义 | 类型 |<br>| —– | —– |  —- |<br>| data | 数据 | String |<br>| weight | 权值 | double |<br>| leftChild | 左节点 | Node |<br>| rightChild | 右节点 | Node |<br>| parent | 父节点 | Node |</p>
+<h4 id="2-统计字符出现的次数，用出现的次数作为权值"><a href="#2-统计字符出现的次数，用出现的次数作为权值" class="headerlink" title="2.统计字符出现的次数，用出现的次数作为权值"></a>2.统计字符出现的次数，用出现的次数作为权值</h4><ul>
+<li>这里实现的思路是：将出现的字符串(C)和次数(count)保存为一个Map&lt;字符，次数&gt;对象,然后再保存为List集合</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;Character, Integer&gt; <span class="title">statistics</span><span class="params">(<span class="keyword">char</span>[] charArray)</span> </span>&#123;</span><br><span class="line">	Map&lt;Character, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;Character, Integer&gt;();</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">char</span> c : charArray) &#123;</span><br><span class="line">		Character character = <span class="keyword">new</span> Character(c);</span><br><span class="line">		<span class="keyword">if</span> (map.containsKey(character)) &#123;</span><br><span class="line">			map.put(character, map.get(character) + <span class="number">1</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			map.put(character, <span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Node&gt; <span class="title">statisticsProbability</span><span class="params">(Map&lt;Character, Integer&gt; maps)</span> </span>&#123;</span><br><span class="line">	List&lt;Node&gt; list = <span class="keyword">new</span> ArrayList&lt;TestHuffmanTree_Encode_Decode.Node&gt;();</span><br><span class="line">	<span class="keyword">for</span> (Map.Entry&lt;Character, Integer&gt; map : maps.entrySet()) &#123;</span><br><span class="line">		Node node = <span class="keyword">new</span> Node(map.getKey().toString(), map.getValue());</span><br><span class="line">		list.add(node);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="3-根据统计的List进行哈夫曼树的构造"><a href="#3-根据统计的List进行哈夫曼树的构造" class="headerlink" title="3.根据统计的List进行哈夫曼树的构造"></a>3.根据统计的List进行哈夫曼树的构造</h4><p>首先List中保存的就是Node集合，其中Node的data就是字符串，Node的weight就是出现的次数也就是权值   </p>
+<p><b>哈夫曼树的构造:</b>   </p>
+<ul>
+<li>首先利用Java中的priorityQueue<e>方法进行模拟队列<br>priorityQueue<e>的用法<!-- 插入图片--> 
+其中主要的方法：<br>| 方法  | 作用  |<br>|—|—|<br>| add  | 将指定元素插入到次优先级队列  |<br>| poll  | 获取并且移除队列头  |<br>|  peek | 获取但是不移出队列  |</e></e></li>
+<li>将List中的数据保存到队列里面去 </li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  PriorityQueue&lt;Node&gt; priorityQueue = <span class="keyword">new</span> PriorityQueue&lt;Node&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nodes.size(); i++) &#123;</span><br><span class="line">	priorityQueue.add(nodes.get(i));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><b>然后利用poll方法获取队列头节点</b>,这里可能就由疑问了，哈夫曼树不是要求按照权值最小的两个开始组成树嘛。这里为什么随便从队列里面弄两个出来就可以。<br>其实是这样的;在Node定义的时候实现了Comparable<node>接口并且实现了compareTo（E e）方法，这里其实就已经实现了队列里面的排序<!--插入图片--></node></li>
+<li>然后构建两个子节点的父节点，并且声明三者之间的关系(父子，左右)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">         <span class="comment">// 构建父节点</span></span><br><span class="line">Node sumNode = <span class="keyword">new</span> Node(node1.data + node2.data, node1.weight</span><br><span class="line">		+ node2.weight);</span><br><span class="line"></span><br><span class="line">sumNode.leftChild = node1;</span><br><span class="line">sumNode.rightChild = node2;</span><br><span class="line"></span><br><span class="line">node1.parent = sumNode;</span><br><span class="line">node2.parent = sumNode;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>然后再将父节点保存到队列中去:这样做的目的是为了得到根节点</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">priorityQueue.add(sumNode);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最后返回根节点 priorityQueue.poll();</p>
+</li>
+</ul>
+<p><b>这样，到这里哈夫曼树的构建就完成了，但是既然学习了就深入一点，<br>哈夫曼树的最长用途就是用来文件压缩，因为我们知道发送一句话的时候并不是每个字母出现的频率都是一样的，有的出现的多有的出现的少，但是如果还是使用一样额编码那样会有很大的消耗，所以这里我们就用哈夫曼树实现对字符串的编码和解码</b></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/14/Android开源框架总结/" rel="next" title="Android开源框架总结">
+                <i class="fa fa-chevron-left"></i> Android开源框架总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/08/最近状态总结/" rel="prev" title="最近的总结">
+                最近的总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/avatar.jpg"
+                alt="Simon" />
+            
+              <p class="site-author-name" itemprop="name">Simon</p>
+              <p class="site-description motion-element" itemprop="description">Hello World !</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wxsimon" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/simon_xin1996" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/2495174663/profile?topnav=1&wvr=6" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://my.csdn.net/qq_28466365" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/wang-xin-38-81-5/activities" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#详细了解哈夫曼树和背包问题"><span class="nav-number">1.</span> <span class="nav-text">详细了解哈夫曼树和背包问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-哈夫曼树（实现基本的编码解码）"><span class="nav-number">1.0.1.</span> <span class="nav-text">1.哈夫曼树（实现基本的编码解码）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-模型构造"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">1.模型构造</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-统计字符出现的次数，用出现的次数作为权值"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">2.统计字符出现的次数，用出现的次数作为权值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-根据统计的List进行哈夫曼树的构造"><span class="nav-number">1.0.1.3.</span> <span class="nav-text">3.根据统计的List进行哈夫曼树的构造</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

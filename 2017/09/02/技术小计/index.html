@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/simle.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/simle.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, World" />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Simon" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="技术小计  写在前面，这篇博客的目的主要是总结我在公司实习的这两个月里面所接触的一些新技术栈，因为时间的关系今天就只能跟新我自己弄的ELK监控平台，以后肯定会慢慢把我这两个月学习的补充上去。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="技术小计">
+<meta property="og:url" content="http://simonxin.top/2017/09/02/技术小计/index.html">
+<meta property="og:site_name" content="Simon">
+<meta property="og:description" content="技术小计  写在前面，这篇博客的目的主要是总结我在公司实习的这两个月里面所接触的一些新技术栈，因为时间的关系今天就只能跟新我自己弄的ELK监控平台，以后肯定会慢慢把我这两个月学习的补充上去。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-06-02T10:13:45.169Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="技术小计">
+<meta name="twitter:description" content="技术小计  写在前面，这篇博客的目的主要是总结我在公司实习的这两个月里面所接触的一些新技术栈，因为时间的关系今天就只能跟新我自己弄的ELK监控平台，以后肯定会慢慢把我这两个月学习的补充上去。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://simonxin.top/2017/09/02/技术小计/"/>
+
+
+
+
+
+  <title>技术小计 | Simon</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?35f898c17da99c8db38cd1dc0eefffb7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Simon</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-wiki">
+          <a href="/wiki/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-wikipedia-w"></i> <br />
+            
+            wiki
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://simonxin.top/2017/09/02/技术小计/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Simon">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simon">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">技术小计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-02T15:49:14+08:00">
+                2017-09-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/总结/" itemprop="url" rel="index">
+                    <span itemprop="name">总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="技术小计"><a href="#技术小计" class="headerlink" title="技术小计"></a>技术小计</h2><blockquote>
+<p> 写在前面，这篇博客的目的主要是总结我在公司实习的这两个月里面所接触的一些新技术栈，因为时间的关系今天就只能跟新我自己弄的ELK监控平台，以后肯定会慢慢把我这两个月学习的补充上去。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="ELK-日志监控平台"><a href="#ELK-日志监控平台" class="headerlink" title="ELK 日志监控平台"></a>ELK 日志监控平台</h3><blockquote>
+<p> 缘起: 因为实习公司的主要业务就是爬虫,所以所有的服务都是以分布式的方式存在。所以公司就使用ELK搭建了一个日志监控平台。</p>
+</blockquote>
+<p>首先ELK看似是存在三个服务的，就我简单理解。分别为:</p>
+<ul>
+<li>Elasticsearch 处理格式化日志</li>
+<li>Logstash 收集日志</li>
+<li>Kinaba 前台展示</li>
+</ul>
+<p>那我现在就一一讲一下我搭建这个平台的时候碰到的坑。首先这三个服务的所有下载包都可以到Elk下载。</p>
+<h4 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h4><ul>
+<li><p>下载安装包<br><code>wget https://artifacts.elasticco/downloads/elasticsearch/elasticsearch-5.5.2.zip</code></p>
+<ul>
+<li>使用非root用户登陆</li>
+<li>因为Elasticsearch的安全策略，禁止root用户启动，所以需要创建一个非root用户来运行Elasticsearch程序。<code>useradd simon</code></li>
+<li>更换Elasticsearh的工作目录的所有者和组都为<code>simon</code>所有。</li>
+</ul>
+</li>
+<li>修改配置文件<ul>
+<li>开启服务之前还会遇到一个坑，就是Elasticsearch默认的内存为2g而一般的服务器都不会得到那么大的内存，所以需要到<code>/config/log4j2.properties</code> 修改内存为能顾接受的范围。</li>
+</ul>
+</li>
+<li>运行<br>好了到这里Elasticsearch的配置就差不多了,只需要让它默默的跑在后台给我们处理日志就可以了。<code>nohup ./bin/elasticsearch &gt;&amp; nohup.out &amp;</code></li>
+<li>验证<br>如何看自己的Elasticsearch是否真的运行在后台呢？<br>只需要访问Elasticsearch的服务测试一下就可以<code>curl localhost:9200</code></li>
+</ul>
+<h3 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h3><ul>
+<li><p>下载安装包<br><code>wget https://artifacts.elastic.co/downloads/logstash/logstash-5.5.2.tar.gz  tar -zxvf</code></p>
+</li>
+<li><p>创建输入输出模板<br>前面说过我的浅显理解Logstas就是用来对日志的收集，所以必定存在对日志输入和输出设定。我这里使用的log4j的日志输入，而且Logstash存在log4j的模板，所以我的日志设置为(需要自建文件):<br><code>Set: https://www.elastic.co/guide/en/logstash/current/configuration-file-structure.html
+input {
+For detail config for log4j as input,
+See: https://www.elastic.co/guide/en/logstash/current/plugins-inputs-log4j.html
+log4j {
+  mode =&gt; &quot;server&quot;
+  host =&gt; &quot;0.0.0.0&quot;
+  port =&gt; 4500
+}
+}
+filter {
+Only matched data are send to output.
+}
+output {
+For detail config for elasticsearch as output,
+See: https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html
+elasticsearch {
+  action =&gt; &quot;index&quot;          #The operation on ES
+  hosts  =&gt; &quot;localhost:9200&quot;   #ElasticSearch host, can be array.
+  index  =&gt; &quot;applog&quot;         #The index to write data to.
+}
+}</code></p>
+</li>
+</ul>
+<p>其中各个参数的含义如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">mode</td>
+<td style="text-align:center">server/client</td>
+<td style="text-align:center">服务器/客户端</td>
+</tr>
+<tr>
+<td style="text-align:center">host</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">服务地址</td>
+</tr>
+<tr>
+<td style="text-align:center">port</td>
+<td style="text-align:center">int</td>
+<td style="text-align:center">服务端口</td>
+</tr>
+<tr>
+<td style="text-align:center">antion</td>
+<td style="text-align:center">index</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">hosts</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">服务的地址</td>
+</tr>
+<tr>
+<td style="text-align:center">index</td>
+<td style="text-align:center">Stirng</td>
+<td style="text-align:center">parent 的名称</td>
+</tr>
+</tbody>
+</table>
+<p>其中，加入你是把你的ELK放在服务器端的话，就需要把hosy设置成为允许访问的ip即 0.0.0.0</p>
+<ul>
+<li>SpringBoot日志输送</li>
+</ul>
+<p>由于SpringBoot的成熟，所以已经集成了Logstash的日志传输服务，只需要在application.properties中添加:</p>
+<p><code>log4j.appender.logstash=org.apache.log4j.net.SocketAppender
+log4j.appender.logstash.RemoteHost=your_server_host
+log4j.appender.logstash.port=4500
+log4j.appender.logstash.ReconnectionDelay=60000
+log4j.appender.logstash.LocationInfo=true</code></p>
+<p>当然你事先得导入log4j的maven依赖库</p>
+<p>`</p>
+<p><dependency><br>  <groupid>org.slf4j</groupid><br>         <artifactid>slf4j-log4j12</artifactid><br></dependency><br>`</p>
+<ul>
+<li>运行</li>
+</ul>
+<p>当一切准备结束之后，我们就可以让Logstash也默默热运行在后台了<br><code>nohup ./bin/logstash -f log4j.conf *&amp; nohup.out &amp;</code></p>
+<h3 id="Kinaba"><a href="#Kinaba" class="headerlink" title="Kinaba"></a>Kinaba</h3><p>下载安装包<br><code>wget https://artifacts.elastic.co/downloads/kibana/kibana-5.5.2-linux-x86_64.tar.gz
+tar -zxvf</code></p>
+<ul>
+<li>配置Kinaba允许外网访问</li>
+</ul>
+<p>进入Kinaba的<code>config/</code>目录下vi Kinaba.yml<br>其中将:</p>
+<ul>
+<li>server.port ：port</li>
+<li>server.host :0.0.0.0</li>
+<li>elasticsearch.url: “<a href="http://localhost:9200“" target="_blank" rel="noopener">http://localhost:9200“</a></li>
+</ul>
+<p>设置完毕，看起来Kinaba的设置相比前面起来简单很多。</p>
+<ul>
+<li>运行</li>
+</ul>
+<p>啦啦啦，只需要简单的配置Kinaba的服务可以运行起来了。<br><code>nohup Kinaba &gt;&amp; nohup.out &amp;</code></p>
+<ul>
+<li>测试</li>
+</ul>
+<p>我们可以打开浏览器输入: localhost:port，等一会，我们就可以看到Kinaba的界面了。<br>然后在中我们在配置Logstash设置的index属性：applog，然后我们就可以看到我们的日志文件了。</p>
+<p><strong>最后说一下，三个的服务启动时存在先后顺序的，处理日志的Elasticsearch必须第一个启动，原因是Logstash中设置了文件输出的位置，假设Elasticsearch的服务没有启动的话，就会存在找不到输出文件的错误。同理在Knaba中也设置了读取日志文件的位置。</strong></p>
+<p>好了，到这里一个简单的日志监控平台就搭建完毕了，因为我写的这篇博客完全都是出于个人的理解，所以其中个肯定存在很多问题。仅供参考。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/08/最近状态总结/" rel="next" title="最近的总结">
+                <i class="fa fa-chevron-left"></i> 最近的总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/03/实习总结/" rel="prev" title="实习总结">
+                实习总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/avatar.jpg"
+                alt="Simon" />
+            
+              <p class="site-author-name" itemprop="name">Simon</p>
+              <p class="site-description motion-element" itemprop="description">Hello World !</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wxsimon" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/simon_xin1996" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/2495174663/profile?topnav=1&wvr=6" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://my.csdn.net/qq_28466365" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.zhihu.com/people/wang-xin-38-81-5/activities" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#技术小计"><span class="nav-number">1.</span> <span class="nav-text">技术小计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ELK-日志监控平台"><span class="nav-number">1.1.</span> <span class="nav-text">ELK 日志监控平台</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Elasticsearch"><span class="nav-number">1.1.1.</span> <span class="nav-text">Elasticsearch</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logstash"><span class="nav-number">1.2.</span> <span class="nav-text">Logstash</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kinaba"><span class="nav-number">1.3.</span> <span class="nav-text">Kinaba</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
