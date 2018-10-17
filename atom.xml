@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://simonxin.top/"/>
-  <updated>2018-06-24T15:17:17.000Z</updated>
+  <updated>2018-10-17T01:54:53.695Z</updated>
   <id>http://simonxin.top/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://simonxin.top/2018/06/24/%E8%AE%B0ETH%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%B0%8F%E8%AE%A1/"/>
     <id>http://simonxin.top/2018/06/24/记ETH智能合约小计/</id>
     <published>2018-06-24T15:00:42.000Z</published>
-    <updated>2018-06-24T15:17:17.000Z</updated>
+    <updated>2018-10-17T01:54:53.695Z</updated>
     
-    <content type="html"><![CDATA[<blockquote><p>这篇文章是因为上个星期处理了一个ETH中智能合约的业务,所以趁着自己还记得,梳理一下.<br><a id="more"></a></p></blockquote><h2 id="ETH智能合约"><a href="#ETH智能合约" class="headerlink" title="ETH智能合约"></a>ETH智能合约</h2><blockquote><p>下面的这些理解都是我片面的理解,并没有得到书面的证实.</p></blockquote><p>这里要说的ETH中的智能合约是EIEC币(电能链)。其实像区块链这么高级的东西我肯定是不懂得。还好公司里面有大佬交着.所以才能够在两天之内就搞定业务.</p><ul><li><p>智能合约的理解</p><p>  智能合约可以看做是部署在以太坊上的一个程序。但是这个程序是透明的代码是开源可见的.而发行的代币可以看做是这个程序里面的一个积分.</p></li><li><p>处理的业务</p><ul><li><p>1.查询余额</p><p>智能合约的查询余额方法需要调取一个<code>call</code>的方法,而该方法可以看做是一笔转账，通过ETH的<a href="!https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_call">wiki</a>我们可以查到该方法所需要的一些参数.</p></li><li><p>2.进行数据签名和广播</p><p>这里就不深入的进行讲解了,智能合约和ETH的签名数据区别在于存在一个ABI编码后的data数据。</p></li><li><p>3.交易查询</p><p>由于智能合约的所有交易的toaddr都是指向了智能合约的主地址(MasterAddr,一个智能合约在主网上的地址是唯一的)。所以并不能更具一笔交易的toaddr查到该交易的具体细节。以太坊提供了另一个方法<code>eth_getTransactionReceipt</code><a href="!https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt">wiki</a>来查询改合约的具体结果.</p></li></ul><p>这里只是很简单的编写了一下。具体的细节可以等下次有时间把具体的流程和数据结构一起带上。</p></li></ul>]]></content>
+    <content type="html"><![CDATA[<blockquote><p>这篇文章是因为上个星期处理了一个ETH中智能合约的业务,所以趁着自己还记得,梳理一下.<br><a id="more"></a></p></blockquote><h2 id="ETH智能合约"><a href="#ETH智能合约" class="headerlink" title="ETH智能合约"></a>ETH智能合约</h2><blockquote><p>下面的这些理解都是我片面的理解,并没有得到书面的证实.</p></blockquote><p>这里要说的ETH中的智能合约是EIEC币(电能链)</p><ul><li><p>智能合约的理解</p><p>  智能合约可以看做是部署在以太坊上的一个程序。但是这个程序是透明的代码是开源可见的.而发行的代币可以看做是这个程序里面的一个积分.</p></li><li><p>处理的业务</p><ul><li><p>1.查询余额</p><p>智能合约的查询余额方法需要调取一个<code>call</code>的方法,而该方法可以看做是一笔转账，通过ETH的<a href="!https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_call">wiki</a>我们可以查到该方法所需要的一些参数.</p></li><li><p>2.进行数据签名和广播</p><p>这里就不深入的进行讲解了,智能合约和ETH的签名数据区别在于存在一个ABI编码后的data数据。</p></li><li><p>3.交易查询</p><p>由于智能合约的所有交易的toaddr都是指向了智能合约的主地址(MasterAddr,一个智能合约在主网上的地址是唯一的)。所以并不能更具一笔交易的toaddr查到该交易的具体细节。以太坊提供了另一个方法<code>eth_getTransactionReceipt</code><a href="!https://github.com/ethereum/wiki/wiki/JSON-RPC#eth_gettransactionreceipt">wiki</a>来查询改合约的具体结果.</p></li></ul><p>这里只是很简单的编写了一下。具体的细节可以等下次有时间把具体的流程和数据结构一起带上。</p></li></ul>]]></content>
     
     <summary type="html">
     
