@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>技术小计 | Simon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="技术小计  写在前面，这篇博客的目的主要是总结我在公司实习的这两个月里面所接触的一些新技术栈，因为时间的关系今天就只能跟新我自己弄的ELK监控平台，以后肯定会慢慢把我这两个月学习的补充上去。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="技术小计">
+<meta property="og:url" content="http://simonxin.top/2017/09/02/技术小计/index.html">
+<meta property="og:site_name" content="Simon">
+<meta property="og:description" content="技术小计  写在前面，这篇博客的目的主要是总结我在公司实习的这两个月里面所接触的一些新技术栈，因为时间的关系今天就只能跟新我自己弄的ELK监控平台，以后肯定会慢慢把我这两个月学习的补充上去。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-06-21T09:49:22.913Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="技术小计">
+<meta name="twitter:description" content="技术小计  写在前面，这篇博客的目的主要是总结我在公司实习的这两个月里面所接触的一些新技术栈，因为时间的关系今天就只能跟新我自己弄的ELK监控平台，以后肯定会慢慢把我这两个月学习的补充上去。">
+  
+    <link rel="alternate" href="/atom.xml" title="Simon" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Simon</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://simonxin.top"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-技术小计" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/02/技术小计/" class="article-date">
+  <time datetime="2017-09-02T07:49:14.000Z" itemprop="datePublished">2017-09-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/总结/">总结</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      技术小计
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="技术小计"><a href="#技术小计" class="headerlink" title="技术小计"></a>技术小计</h2><blockquote>
+<p> 写在前面，这篇博客的目的主要是总结我在公司实习的这两个月里面所接触的一些新技术栈，因为时间的关系今天就只能跟新我自己弄的ELK监控平台，以后肯定会慢慢把我这两个月学习的补充上去。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="ELK-日志监控平台"><a href="#ELK-日志监控平台" class="headerlink" title="ELK 日志监控平台"></a>ELK 日志监控平台</h3><blockquote>
+<p> 缘起: 因为实习公司的主要业务就是爬虫,所以所有的服务都是以分布式的方式存在。所以公司就使用ELK搭建了一个日志监控平台。</p>
+</blockquote>
+<p>首先ELK看似是存在三个服务的，就我简单理解。分别为:</p>
+<ul>
+<li>Elasticsearch 处理格式化日志</li>
+<li>Logstash 收集日志</li>
+<li>Kinaba 前台展示</li>
+</ul>
+<p>那我现在就一一讲一下我搭建这个平台的时候碰到的坑。首先这三个服务的所有下载包都可以到Elk下载。</p>
+<h4 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h4><ul>
+<li><p>下载安装包<br><code>wget https://artifacts.elasticco/downloads/elasticsearch/elasticsearch-5.5.2.zip</code></p>
+<ul>
+<li>使用非root用户登陆</li>
+<li>因为Elasticsearch的安全策略，禁止root用户启动，所以需要创建一个非root用户来运行Elasticsearch程序。<code>useradd simon</code></li>
+<li>更换Elasticsearh的工作目录的所有者和组都为<code>simon</code>所有。</li>
+</ul>
+</li>
+<li>修改配置文件<ul>
+<li>开启服务之前还会遇到一个坑，就是Elasticsearch默认的内存为2g而一般的服务器都不会得到那么大的内存，所以需要到<code>/config/log4j2.properties</code> 修改内存为能顾接受的范围。</li>
+</ul>
+</li>
+<li>运行<br>好了到这里Elasticsearch的配置就差不多了,只需要让它默默的跑在后台给我们处理日志就可以了。<code>nohup ./bin/elasticsearch &gt;&amp; nohup.out &amp;</code></li>
+<li>验证<br>如何看自己的Elasticsearch是否真的运行在后台呢？<br>只需要访问Elasticsearch的服务测试一下就可以<code>curl localhost:9200</code></li>
+</ul>
+<h3 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h3><ul>
+<li><p>下载安装包<br><code>wget https://artifacts.elastic.co/downloads/logstash/logstash-5.5.2.tar.gz  tar -zxvf</code></p>
+</li>
+<li><p>创建输入输出模板<br>前面说过我的浅显理解Logstas就是用来对日志的收集，所以必定存在对日志输入和输出设定。我这里使用的log4j的日志输入，而且Logstash存在log4j的模板，所以我的日志设置为(需要自建文件):<br><code>Set: https://www.elastic.co/guide/en/logstash/current/configuration-file-structure.html
+input {
+For detail config for log4j as input,
+See: https://www.elastic.co/guide/en/logstash/current/plugins-inputs-log4j.html
+log4j {
+  mode =&gt; &quot;server&quot;
+  host =&gt; &quot;0.0.0.0&quot;
+  port =&gt; 4500
+}
+}
+filter {
+Only matched data are send to output.
+}
+output {
+For detail config for elasticsearch as output,
+See: https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html
+elasticsearch {
+  action =&gt; &quot;index&quot;          #The operation on ES
+  hosts  =&gt; &quot;localhost:9200&quot;   #ElasticSearch host, can be array.
+  index  =&gt; &quot;applog&quot;         #The index to write data to.
+}
+}</code></p>
+</li>
+</ul>
+<p>其中各个参数的含义如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">mode</td>
+<td style="text-align:center">server/client</td>
+<td style="text-align:center">服务器/客户端</td>
+</tr>
+<tr>
+<td style="text-align:center">host</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">服务地址</td>
+</tr>
+<tr>
+<td style="text-align:center">port</td>
+<td style="text-align:center">int</td>
+<td style="text-align:center">服务端口</td>
+</tr>
+<tr>
+<td style="text-align:center">antion</td>
+<td style="text-align:center">index</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">hosts</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">服务的地址</td>
+</tr>
+<tr>
+<td style="text-align:center">index</td>
+<td style="text-align:center">Stirng</td>
+<td style="text-align:center">parent 的名称</td>
+</tr>
+</tbody>
+</table>
+<p>其中，加入你是把你的ELK放在服务器端的话，就需要把hosy设置成为允许访问的ip即 0.0.0.0</p>
+<ul>
+<li>SpringBoot日志输送</li>
+</ul>
+<p>由于SpringBoot的成熟，所以已经集成了Logstash的日志传输服务，只需要在application.properties中添加:</p>
+<p><code>log4j.appender.logstash=org.apache.log4j.net.SocketAppender
+log4j.appender.logstash.RemoteHost=your_server_host
+log4j.appender.logstash.port=4500
+log4j.appender.logstash.ReconnectionDelay=60000
+log4j.appender.logstash.LocationInfo=true</code></p>
+<p>当然你事先得导入log4j的maven依赖库</p>
+<p>`</p>
+<p><dependency><br>  <groupid>org.slf4j</groupid><br>         <artifactid>slf4j-log4j12</artifactid><br></dependency><br>`</p>
+<ul>
+<li>运行</li>
+</ul>
+<p>当一切准备结束之后，我们就可以让Logstash也默默热运行在后台了<br><code>nohup ./bin/logstash -f log4j.conf *&amp; nohup.out &amp;</code></p>
+<h3 id="Kinaba"><a href="#Kinaba" class="headerlink" title="Kinaba"></a>Kinaba</h3><p>下载安装包<br><code>wget https://artifacts.elastic.co/downloads/kibana/kibana-5.5.2-linux-x86_64.tar.gz
+tar -zxvf</code></p>
+<ul>
+<li>配置Kinaba允许外网访问</li>
+</ul>
+<p>进入Kinaba的<code>config/</code>目录下vi Kinaba.yml<br>其中将:</p>
+<ul>
+<li>server.port ：port</li>
+<li>server.host :0.0.0.0</li>
+<li>elasticsearch.url: “<a href="http://localhost:9200“" target="_blank" rel="noopener">http://localhost:9200“</a></li>
+</ul>
+<p>设置完毕，看起来Kinaba的设置相比前面起来简单很多。</p>
+<ul>
+<li>运行</li>
+</ul>
+<p>啦啦啦，只需要简单的配置Kinaba的服务可以运行起来了。<br><code>nohup Kinaba &gt;&amp; nohup.out &amp;</code></p>
+<ul>
+<li>测试</li>
+</ul>
+<p>我们可以打开浏览器输入: localhost:port，等一会，我们就可以看到Kinaba的界面了。<br>然后在中我们在配置Logstash设置的index属性：applog，然后我们就可以看到我们的日志文件了。</p>
+<p><strong>最后说一下，三个的服务启动时存在先后顺序的，处理日志的Elasticsearch必须第一个启动，原因是Logstash中设置了文件输出的位置，假设Elasticsearch的服务没有启动的话，就会存在找不到输出文件的错误。同理在Knaba中也设置了读取日志文件的位置。</strong></p>
+<p>好了，到这里一个简单的日志监控平台就搭建完毕了，因为我写的这篇博客完全都是出于个人的理解，所以其中个肯定存在很多问题。仅供参考。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://simonxin.top/2017/09/02/技术小计/" data-id="ckbpsaenn0017siz3junhvpr7" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/09/03/实习总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          实习总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/08/最近状态总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">最近的总结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GitHub/">GitHub	</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/区块链/">区块链</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/基础/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EOS/">EOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Io流/">Io流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaWeb/">JavaWeb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/云服务/">云服务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/反思/">反思</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工作/">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/排序/">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/框架/">框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计/">设计</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/EOS/" style="font-size: 10px;">EOS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Io流/" style="font-size: 11.67px;">Io流</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/JavaWeb/" style="font-size: 13.33px;">JavaWeb</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/XML/" style="font-size: 10px;">XML</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/云服务/" style="font-size: 10px;">云服务</a> <a href="/tags/区块链/" style="font-size: 10px;">区块链</a> <a href="/tags/反思/" style="font-size: 11.67px;">反思</a> <a href="/tags/基础/" style="font-size: 18.33px;">基础</a> <a href="/tags/工作/" style="font-size: 10px;">工作</a> <a href="/tags/开发/" style="font-size: 10px;">开发</a> <a href="/tags/总结/" style="font-size: 16.67px;">总结</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/排序/" style="font-size: 11.67px;">排序</a> <a href="/tags/数据结构/" style="font-size: 11.67px;">数据结构</a> <a href="/tags/框架/" style="font-size: 13.33px;">框架</a> <a href="/tags/生活/" style="font-size: 13.33px;">生活</a> <a href="/tags/算法/" style="font-size: 11.67px;">算法</a> <a href="/tags/经验/" style="font-size: 10px;">经验</a> <a href="/tags/设计/" style="font-size: 10px;">设计</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/21/如何使用-GitHub-的-Actions-实现项目的-CI-CD/">如何使用 GitHub 的 Actions 实现项目的 CI/CD</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/31/设计模式/">设计模式</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/28/Mysql-生产环境用到的技术/">Mysql 生产环境用到的技术</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/23/Mysql-的两种引擎/">Mysql 的两种引擎</a>
+          </li>
+        
+          <li>
+            <a href="/2020/03/19/Java-自旋锁/">Java 自旋锁</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Simon<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
