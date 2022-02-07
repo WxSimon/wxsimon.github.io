@@ -6,26 +6,22 @@
   <title>服务器迁移小计 | Simon</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="哇.一晃一年过去了,看自己上篇博客还是去年九月份的时候更新了，唉！回想起自己秋招之后的这半年,感觉真的是可以用命运多舛来形容了,好在日子会越过越好,现在的工作虽然没有武汉时那么清闲,偶尔会加班到十一二点,但是年轻人嘛,或者就是折腾得。刚好撑着这个周末其它的一些事情都处理结束了,查看自己的阿里云也马上到期了,(😔 毕业就薅不到这些羊毛了)。但是服务器上还部署着很多服务,所以想着刚好写写自己最近的">
-<meta name="keywords" content="总结,Linux,云服务,Docker,工作">
 <meta property="og:type" content="article">
 <meta property="og:title" content="服务器迁移小计">
-<meta property="og:url" content="http://simonxin.top/2018/06/03/服务器迁移小计/index.html">
+<meta property="og:url" content="http://simonxin.top/2018/06/03/%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%81%E7%A7%BB%E5%B0%8F%E8%AE%A1/index.html">
 <meta property="og:site_name" content="Simon">
 <meta property="og:description" content="哇.一晃一年过去了,看自己上篇博客还是去年九月份的时候更新了，唉！回想起自己秋招之后的这半年,感觉真的是可以用命运多舛来形容了,好在日子会越过越好,现在的工作虽然没有武汉时那么清闲,偶尔会加班到十一二点,但是年轻人嘛,或者就是折腾得。刚好撑着这个周末其它的一些事情都处理结束了,查看自己的阿里云也马上到期了,(😔 毕业就薅不到这些羊毛了)。但是服务器上还部署着很多服务,所以想着刚好写写自己最近的">
-<meta property="og:locale" content="zh-Hans">
+<meta property="og:locale">
 <meta property="og:image" content="http://simonxin.top/images/18.6.3/01.JPG">
-<meta property="og:image" content="http://simonxin.top/images/18.6.3/02.JPG">
-<meta property="og:image" content="http://simonxin.top/images/18.6.3/03.JPG">
-<meta property="og:image" content="http://simonxin.top/images/18.6.3/04.JPG">
-<meta property="og:image" content="http://simonxin.top/images/18.6.3/05.JPG">
-<meta property="og:image" content="http://simonxin.top/images/18.6.3/06.JPG">
-<meta property="og:image" content="http://simonxin.top/images/18.6.3/07.JPG">
-<meta property="og:image" content="http://simonxin.top/images/18.6.3/08.JPG">
-<meta property="og:image" content="http://simonxin.top/images/18.6.3/09.JPG">
-<meta property="og:updated_time" content="2020-06-21T09:49:22.914Z">
+<meta property="article:published_time" content="2018-06-03T02:33:00.000Z">
+<meta property="article:modified_time" content="2020-06-21T09:49:22.914Z">
+<meta property="article:author" content="Simon">
+<meta property="article:tag" content="总结">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="云服务">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="工作">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="服务器迁移小计">
-<meta name="twitter:description" content="哇.一晃一年过去了,看自己上篇博客还是去年九月份的时候更新了，唉！回想起自己秋招之后的这半年,感觉真的是可以用命运多舛来形容了,好在日子会越过越好,现在的工作虽然没有武汉时那么清闲,偶尔会加班到十一二点,但是年轻人嘛,或者就是折腾得。刚好撑着这个周末其它的一些事情都处理结束了,查看自己的阿里云也马上到期了,(😔 毕业就薅不到这些羊毛了)。但是服务器上还部署着很多服务,所以想着刚好写写自己最近的">
 <meta name="twitter:image" content="http://simonxin.top/images/18.6.3/01.JPG">
   
     <link rel="alternate" href="/atom.xml" title="Simon" type="application/atom+xml">
@@ -36,10 +32,12 @@
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
   
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 
 <body>
   <div id="container">
@@ -77,12 +75,12 @@
       <div class="outer">
         <section id="main"><article id="post-服务器迁移小计" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/06/03/服务器迁移小计/" class="article-date">
+    <a href="/2018/06/03/%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%81%E7%A7%BB%E5%B0%8F%E8%AE%A1/" class="article-date">
   <time datetime="2018-06-03T02:33:00.000Z" itemprop="datePublished">2018-06-03</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/技术/">技术</a>
+    <a class="article-category-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a>
   </div>
 
   </div>
@@ -104,37 +102,35 @@
         <blockquote>
 <p>哇.一晃一年过去了,看自己上篇博客还是去年九月份的时候更新了，唉！回想起自己秋招之后的这半年,感觉真的是可以用命运多舛来形容了,好在日子会越过越好,现在的工作虽然没有武汉时那么清闲,偶尔会加班到十一二点,但是年轻人嘛,或者就是折腾得。刚好撑着这个周末其它的一些事情都处理结束了,查看自己的阿里云也马上到期了,(😔 毕业就薅不到这些羊毛了)。但是服务器上还部署着很多服务,所以想着刚好写写自己最近的状态和把服务器上的东西备份一下。</p>
 </blockquote>
-<a id="more"></a>
+<span id="more"></span>
 <h2 id="服务器迁移"><a href="#服务器迁移" class="headerlink" title="服务器迁移"></a>服务器迁移</h2><h3 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h3><h4 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h4><ul>
 <li><p>1.去Java官网下载相关的Jdk开发环境</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -c --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -c --header &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.tar.gz</span><br></pre></td></tr></table></figure>
 <ul>
 <li>1.编辑相关环境变量<code>vim /etc/profile</code></li>
-<li><p>2.添加环境变量</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   export JAVA_HOME=/usr/java/jdk1.8.0_144</span><br><span class="line">export JRE_HOME=$JAVA_HOME/jre</span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin</span><br><span class="line">export CLASSPATH=./:$JAVA_HOME/lib:$JAVA_HOM/jre/lib</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>3.执行<code>source /etc/profile</code></p>
-</li>
-<li><p>4.验证<code>java -version</code></p>
-<p>到这里Java的开发环境就安装好了,很简单有木有。</p>
-</li>
+<li>2.添加环境变量  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   export JAVA_HOME=/usr/java/jdk1.8.0_144</span><br><span class="line">export JRE_HOME=$JAVA_HOME/jre</span><br><span class="line">export PATH=$PATH:$JAVA_HOME/bin</span><br><span class="line">export CLASSPATH=./:$JAVA_HOME/lib:$JAVA_HOM/jre/lib</span><br></pre></td></tr></table></figure></li>
+<li>3.执行<code>source /etc/profile</code></li>
+<li>4.验证<code>java -version</code></li>
 </ul>
+<p>  到这里Java的开发环境就安装好了,很简单有木有。</p>
 </li>
 </ul>
 <h4 id="Mysql"><a href="#Mysql" class="headerlink" title="Mysql"></a>Mysql</h4><p>作为一个Java开发者,怎么可能少的了Mysql呢,但是现在由于云技术的发展,安装mysql可以采用两种方式,下面具体介绍</p>
 <ul>
 <li><p>普通安装方式(不推荐)</p>
 <p>1.可以去Mysql的官网下载相关依赖库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://dev.mysql.com/get/mysql57-community-release-el7-9.noarch.rpm</span><br></pre></td></tr></table></figure>
+
 <p>2.使用仓库安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install mysql-server</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install mysql-server</span><br></pre></td></tr></table></figure>
+
 <p>3.mysql的一些基本命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysqld #启动MySQL</span><br><span class="line">systemctl stop mysqld #关闭MySQL</span><br><span class="line">systemctl restart mysqld #重启MySQL</span><br><span class="line">systemctl status mysqld #查看MySQL运行状态</span><br><span class="line">systemctl enable mysqld #设置开机启动</span><br><span class="line">systemctl disable mysqld #关闭开机启动</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">systemctl start mysqld #启动MySQL</span><br><span class="line">systemctl stop mysqld #关闭MySQL</span><br><span class="line">systemctl restart mysqld #重启MySQL</span><br><span class="line">systemctl status mysqld #查看MySQL运行状态</span><br><span class="line">systemctl enable mysqld #设置开机启动</span><br><span class="line">systemctl disable mysqld #关闭开机启动</span><br></pre></td></tr></table></figure>
+
 <p>4.找到临时密码</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &apos;temporary password&apos; /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep &#x27;temporary password&#x27; /var/log/mysqld.log</span><br></pre></td></tr></table></figure>
 <p>5.删除密码安全限制：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UNINSTALL PLUGIN validate_password;</span><br></pre></td></tr></table></figure>
-</li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UNINSTALL PLUGIN validate_password;</span><br></pre></td></tr></table></figure></li>
 </ul>
 <blockquote>
 <p><strong>到这里普通的Mysql安装方式也结束了,那么来看看Doker是如何安装的把</strong></p>
@@ -143,71 +139,63 @@
 <li><p>采用Docker安装</p>
 <ul>
 <li><p>1.首先得安装Docker</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install docker-io</span><br></pre></td></tr></table></figure>
-</li>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum -y install docker-io</span><br></pre></td></tr></table></figure></li>
 <li><p>2.找到一个可靠的源(这里推荐DaoCloud的源)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://hub.daocloud.io/</span><br></pre></td></tr></table></figure>
-</li>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://hub.daocloud.io/</span><br></pre></td></tr></table></figure></li>
 <li><p>3.配置Mysql的镜像</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name mysql -e MYSQL_ROOT_PASSWORD=xxx -p 3306:3306 -d daocloud.io/mysql:tag</span><br></pre></td></tr></table></figure>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --name mysql -e MYSQL_ROOT_PASSWORD=xxx -p 3306:3306 -d daocloud.io/mysql:tag</span><br></pre></td></tr></table></figure>
 <ul>
 <li>其中<code>MYSQL_ROOT_PASSWORD</code>后加mysql的密码</li>
 <li><code>-p</code>后加需要映射的端口</li>
 </ul>
 </li>
-<li><p>4.安装进行后<br>我们就存在一个默认的容器,使用<code>docker ps</code>就可以看到列表</p>
+<li><p>4.安装进行后<br>  我们就存在一个默认的容器,使用<code>docker ps</code>就可以看到列表</p>
 </li>
-<li><p>5.如何进入容器<br><code>docker exec -it xxx /bash/bin</code></p>
-<p><strong>到这里Mysql Docker的安装方式也结束了</strong></p>
+<li><p>5.如何进入容器<br>  <code>docker exec -it xxx /bash/bin</code></p>
 </li>
 </ul>
+<p>  <strong>到这里Mysql Docker的安装方式也结束了</strong></p>
 </li>
 </ul>
 <h4 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h4><p>Nginx是现在比较主流的一款web服务器,但是在Linux上，nginx的安装方式还是很麻烦的,所以有Docker的情况下,我们没比较再去花时间在安装上面，我们可以直接去镜像中心下载nginx的镜像</p>
 <ul>
-<li><p>编写自己的Dockerfile</p>
-<ul>
-<li>1.创建相关的文件夹<br><code>mkdir -p ~/nginx/www ~/nginx/logs ~/nginx/conf</code>三个文件夹的含义分别为:<ul>
+<li>编写自己的Dockerfile<ul>
+<li>1.创建相关的文件夹<br>  <code>mkdir -p ~/nginx/www ~/nginx/logs ~/nginx/conf</code>三个文件夹的含义分别为:<ul>
 <li>www目录将映射为nginx容器配置的虚拟目录</li>
 <li>logs目录将映射为nginx容器的日志目录</li>
 <li>conf目录里的配置文件将映射为nginx容器的配置文件</li>
 </ul>
 </li>
-<li><p>2.拉取Nginx镜像</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>3.运行镜像</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 80:80 --name mynginx -v $PWD/www:/www -v $PWD/conf/nginx.conf:/etc/nginx/nginx.conf -v $PWD/logs:/wwwlogs  -d nginx  xxx</span><br></pre></td></tr></table></figure>
+<li>2.拉取Nginx镜像  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull nginx</span><br></pre></td></tr></table></figure></li>
+<li>3.运行镜像  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 80:80 --name mynginx -v $PWD/www:/www -v $PWD/conf/nginx.conf:/etc/nginx/nginx.conf -v $PWD/logs:/wwwlogs  -d nginx  xxx</span><br></pre></td></tr></table></figure></li>
+</ul>
 <ul>
 <li><p>-p 80:80：将容器的80端口映射到主机的80端口</p>
 </li>
 <li><p>–name mynginx：将容器命名为mynginx</p>
 </li>
-<li><p>-v $PWD/www:/www：将主机中当前目录下的www挂载到容器的/www</p>
+<li><p>-v $PWD&#x2F;www:&#x2F;www：将主机中当前目录下的www挂载到容器的&#x2F;www</p>
 </li>
-<li><p>-v $PWD/conf/nginx.conf:/etc/nginx/nginx.conf：将主机中当前目录下的nginx.conf挂载到容器的/etc/nginx/nginx.conf</p>
+<li><p>-v $PWD&#x2F;conf&#x2F;nginx.conf:&#x2F;etc&#x2F;nginx&#x2F;nginx.conf：将主机中当前目录下的nginx.conf挂载到容器的&#x2F;etc&#x2F;nginx&#x2F;nginx.conf</p>
 </li>
-<li><p>-v $PWD/logs:/wwwlogs：将主机中当前目录下的logs挂载到容器的/wwwlogs</p>
-</li>
-</ul>
+<li><p>-v $PWD&#x2F;logs:&#x2F;wwwlogs：将主机中当前目录下的logs挂载到容器的&#x2F;wwwlogs</p>
 </li>
 </ul>
 </li>
 </ul>
 <h3 id="服务程序"><a href="#服务程序" class="headerlink" title="服务程序"></a>服务程序</h3><blockquote>
-<p>现在在服务器上还存在的程序有:<a href="http://simoncode.top/movie" target="_blank" rel="noopener">80s的电影爬虫</a>,<a href="http://simoncode.top" target="_blank" rel="noopener">个人主页</a>;</p>
+<p>现在在服务器上还存在的程序有:<a target="_blank" rel="noopener" href="http://simoncode.top/movie">80s的电影爬虫</a>,<a target="_blank" rel="noopener" href="http://simoncode.top/">个人主页</a>;</p>
 </blockquote>
 <h4 id="电影爬虫"><a href="#电影爬虫" class="headerlink" title="电影爬虫"></a>电影爬虫</h4><p>这个项目是采用SpringBoot+Redis实现的,其实编写的时间还算挺早的,早在17年九月份在武汉实习的时候花了不到一个星期就完成了,之后就一直部署在自己的服务器上，期间还自己重构过几次,但是由于天生并不是编写前端的料子,所及虽然重构过几次,页面依然是非常的丑.这个爬虫采用SpringBoot编写,所以只需要有Java环境就可以运行,但是里面相关依赖了Redis、Mysql等组件,所以运行的话需要先将这个组件安装.</p>
 <ul>
 <li><p>自动化更新脚本:</p>
 <p>  凭借自己对Linux的一知半解,编写了一个脚本,用来自动化从Git上拉取代码和更新打包运行。脚本主要分三部分:</p>
 <p> 运行脚本(run.sh):</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup java  -jar  -Dserver.port=8089  xxx-1.0-SNAPSHOT.jar   &amp;&gt;nohup.out &amp;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nohup java  -jar  -Dserver.port=8089  xxx-1.0-SNAPSHOT.jar   &amp;&gt;nohup.out &amp;</span><br></pre></td></tr></table></figure>
 <p> 停止脚本(stop.sh):</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   for PID in `ps aux | grep &apos;java&apos; | grep &apos;movie&apos; | grep -v &apos;grep&apos; | awk &apos;&#123;print $2&#125;&apos;`; do</span><br><span class="line">        kill -9 $PID</span><br><span class="line">done</span><br><span class="line">echo &quot;[kill Simon service]&quot;</span><br></pre></td></tr></table></figure>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">   for PID in `ps aux | grep &#x27;java&#x27; | grep &#x27;movie&#x27; | grep -v &#x27;grep&#x27; | awk &#x27;&#123;print $2&#125;&#x27;`; do</span><br><span class="line">        kill -9 $PID</span><br><span class="line">done</span><br><span class="line">echo &quot;[kill Simon service]&quot;</span><br></pre></td></tr></table></figure>
 <p> 更新脚本(update.sh):</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cd ~/source/Zhihu #源码路径</span><br><span class="line">git pull #更新代码</span><br><span class="line">mvn package -Dmaven.test.skip=true #maven打包</span><br><span class="line">cd ~/zhihu	#进入项目目录</span><br><span class="line">sh stop.sh </span><br><span class="line">rm -f web-1.0.0-SNAPSHOT.jar</span><br><span class="line">mv ~/source/Zhihu/web/target/web-1.0-SNAPSHOT.jar ~/zhihu</span><br><span class="line">echo Project Update Finish </span><br><span class="line">sh run.sh</span><br><span class="line">echo Project Running</span><br></pre></td></tr></table></figure>
-</li>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cd ~/source/Zhihu #源码路径</span><br><span class="line">git pull #更新代码</span><br><span class="line">mvn package -Dmaven.test.skip=true #maven打包</span><br><span class="line">cd ~/zhihu	#进入项目目录</span><br><span class="line">sh stop.sh </span><br><span class="line">rm -f web-1.0.0-SNAPSHOT.jar</span><br><span class="line">mv ~/source/Zhihu/web/target/web-1.0-SNAPSHOT.jar ~/zhihu</span><br><span class="line">echo Project Update Finish </span><br><span class="line">sh run.sh</span><br><span class="line">echo Project Running</span><br></pre></td></tr></table></figure></li>
 </ul>
 <blockquote>
 <p>使用上部分自动化脚本的前提是你得配置了github的相关ssh key<br>其实配置github的相关key 也是很简单的,只需要在bash中输入<code>ssh-keygen -t rsa -C &quot;email&quot;</code>就可以了</p>
@@ -225,14 +213,30 @@
 <p>她在南京找到了一份还不错的工作，福利待遇行业都比较符合她的口味,就这样我们寄去年七月份后又再一次的在一起了,也算结束了四年的异地恋.每天下班早或者周末的时候都可以做一顿好吃的一起品尝。[话说现在的我做饭手艺确实不赖啊!]</p>
 <p>最后分享一点最近的照片吧.</p>
 <p><img src="/images/18.6.3/01.JPG" alt="酷酷的小杨"></p>
-<center><font color="grey"><strong>酷酷的小杨</strong></font></center><br><img src="/images/18.6.3/02.JPG" alt="安静的小杨"><br><br><br><img src="/images/18.6.3/03.JPG" alt="安静的小杨"><br><br><br><img src="/images/18.6.3/04.JPG" alt="酷酷的小杨"><br><br><br><img src="/images/18.6.3/05.JPG" alt="酷酷的小杨"><br><br><br><img src="/images/18.6.3/06.JPG" alt="酷酷的小杨"><br><br><br><img src="/images/18.6.3/07.JPG" alt="酷酷的小杨"><br><br><br><img src="/images/18.6.3/08.JPG" alt="酷酷的小杨"><br><center><font color="grey"><strong>安静的小杨</strong></font></center><br><img src="/images/18.6.3/09.JPG" alt="快要死掉的多肉"><br><center><font color="grey"><strong>快要死掉的多肉</strong></font></center>
+<center><font color=grey>**酷酷的小杨**</font></center>
+![安静的小杨](/images/18.6.3/02.JPG)
+<br>
+![安静的小杨](/images/18.6.3/03.JPG)
+<br>
+![酷酷的小杨](/images/18.6.3/04.JPG)
+<br>
+![酷酷的小杨](/images/18.6.3/05.JPG)
+<br>
+![酷酷的小杨](/images/18.6.3/06.JPG)
+<br>
+![酷酷的小杨](/images/18.6.3/07.JPG)
+<br>
+![酷酷的小杨](/images/18.6.3/08.JPG)
+<center><font color=grey>**安静的小杨**</font></center>
+![快要死掉的多肉](/images/18.6.3/09.JPG)
+<center><font color=grey>**快要死掉的多肉**</font></center>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://simonxin.top/2018/06/03/服务器迁移小计/" data-id="ckbpsaent001ksiz3rtx3rpwv" class="article-share-link">Share</a>
+      <a data-url="http://simonxin.top/2018/06/03/%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%BF%81%E7%A7%BB%E5%B0%8F%E8%AE%A1/" data-id="ckzbzfvkk001nd1z420mrdx7k" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/云服务/">云服务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/工作/">工作</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/总结/">总结</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1/" rel="tag">云服务</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C/" rel="tag">工作</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li></ul>
 
     </footer>
   </div>
@@ -240,7 +244,7 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/06/24/记ETH智能合约小计/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/06/24/%E8%AE%B0ETH%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E5%B0%8F%E8%AE%A1/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
@@ -250,7 +254,7 @@
     </a>
   
   
-    <a href="/2017/09/03/实习总结/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/09/03/%E5%AE%9E%E4%B9%A0%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">实习总结</div>
     </a>
@@ -268,7 +272,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GitHub/">GitHub	</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/区块链/">区块链</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/基础/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GitHub/">GitHub	</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%80%BB%E7%BB%93/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></li></ul>
     </div>
   </div>
 
@@ -278,7 +282,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EOS/">EOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Io流/">Io流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaWeb/">JavaWeb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/云服务/">云服务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/反思/">反思</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工作/">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/排序/">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/框架/">框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计/">设计</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EOS/" rel="tag">EOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/" rel="tag">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Io%E6%B5%81/" rel="tag">Io流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaWeb/" rel="tag">JavaWeb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1/" rel="tag">云服务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E6%80%9D/" rel="tag">反思</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C/" rel="tag">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag">技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A1%86%E6%9E%B6/" rel="tag">框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E9%AA%8C/" rel="tag">经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1/" rel="tag">设计</a></li></ul>
     </div>
   </div>
 
@@ -288,7 +292,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/EOS/" style="font-size: 10px;">EOS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Io流/" style="font-size: 11.67px;">Io流</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/JavaWeb/" style="font-size: 13.33px;">JavaWeb</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/XML/" style="font-size: 10px;">XML</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/云服务/" style="font-size: 10px;">云服务</a> <a href="/tags/区块链/" style="font-size: 10px;">区块链</a> <a href="/tags/反思/" style="font-size: 11.67px;">反思</a> <a href="/tags/基础/" style="font-size: 18.33px;">基础</a> <a href="/tags/工作/" style="font-size: 10px;">工作</a> <a href="/tags/开发/" style="font-size: 10px;">开发</a> <a href="/tags/总结/" style="font-size: 16.67px;">总结</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/排序/" style="font-size: 11.67px;">排序</a> <a href="/tags/数据结构/" style="font-size: 11.67px;">数据结构</a> <a href="/tags/框架/" style="font-size: 13.33px;">框架</a> <a href="/tags/生活/" style="font-size: 13.33px;">生活</a> <a href="/tags/算法/" style="font-size: 11.67px;">算法</a> <a href="/tags/经验/" style="font-size: 10px;">经验</a> <a href="/tags/设计/" style="font-size: 10px;">设计</a>
+      <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/EOS/" style="font-size: 10px;">EOS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Io%E6%B5%81/" style="font-size: 11.67px;">Io流</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/JavaWeb/" style="font-size: 13.33px;">JavaWeb</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/XML/" style="font-size: 10px;">XML</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1/" style="font-size: 10px;">云服务</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 10px;">区块链</a> <a href="/tags/%E5%8F%8D%E6%80%9D/" style="font-size: 11.67px;">反思</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.33px;">基础</a> <a href="/tags/%E5%B7%A5%E4%BD%9C/" style="font-size: 10px;">工作</a> <a href="/tags/%E5%BC%80%E5%8F%91/" style="font-size: 10px;">开发</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 16.67px;">总结</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 11.67px;">排序</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 11.67px;">数据结构</a> <a href="/tags/%E6%A1%86%E6%9E%B6/" style="font-size: 13.33px;">框架</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 13.33px;">生活</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 11.67px;">算法</a> <a href="/tags/%E7%BB%8F%E9%AA%8C/" style="font-size: 10px;">经验</a> <a href="/tags/%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">设计</a>
     </div>
   </div>
 
@@ -310,23 +314,23 @@
       <ul>
         
           <li>
-            <a href="/2020/06/21/如何使用-GitHub-的-Actions-实现项目的-CI-CD/">如何使用 GitHub 的 Actions 实现项目的 CI/CD</a>
+            <a href="/2020/06/21/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-GitHub-%E7%9A%84-Actions-%E5%AE%9E%E7%8E%B0%E9%A1%B9%E7%9B%AE%E7%9A%84-CI-CD/">如何使用 GitHub 的 Actions 实现项目的 CI/CD</a>
           </li>
         
           <li>
-            <a href="/2020/03/31/设计模式/">设计模式</a>
+            <a href="/2020/03/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
           </li>
         
           <li>
-            <a href="/2020/03/28/Mysql-生产环境用到的技术/">Mysql 生产环境用到的技术</a>
+            <a href="/2020/03/28/Mysql-%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E7%94%A8%E5%88%B0%E7%9A%84%E6%8A%80%E6%9C%AF/">Mysql 生产环境用到的技术</a>
           </li>
         
           <li>
-            <a href="/2020/03/23/Mysql-的两种引擎/">Mysql 的两种引擎</a>
+            <a href="/2020/03/23/Mysql-%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%BC%95%E6%93%8E/">Mysql 的两种引擎</a>
           </li>
         
           <li>
-            <a href="/2020/03/19/Java-自旋锁/">Java 自旋锁</a>
+            <a href="/2020/03/19/Java-%E8%87%AA%E6%97%8B%E9%94%81/">Java 自旋锁</a>
           </li>
         
       </ul>
@@ -341,7 +345,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2020 Simon<br>
+      &copy; 2022 Simon<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -359,11 +363,17 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
 
   </div>
 </body>

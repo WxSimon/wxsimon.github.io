@@ -6,17 +6,19 @@
   <title>Java 自旋锁 | Simon</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="最近看视频刚好看到关于 Java 自旋锁相关内容，结合实例代码做一个记录">
-<meta name="keywords" content="基础,Java,Io流">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java 自旋锁">
-<meta property="og:url" content="http://simonxin.top/2020/03/19/Java-自旋锁/index.html">
+<meta property="og:url" content="http://simonxin.top/2020/03/19/Java-%E8%87%AA%E6%97%8B%E9%94%81/index.html">
 <meta property="og:site_name" content="Simon">
 <meta property="og:description" content="最近看视频刚好看到关于 Java 自旋锁相关内容，结合实例代码做一个记录">
-<meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-06-21T09:49:22.911Z">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-19T13:14:13.000Z">
+<meta property="article:modified_time" content="2020-06-21T09:49:22.911Z">
+<meta property="article:author" content="Simon">
+<meta property="article:tag" content="基础">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="Io流">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java 自旋锁">
-<meta name="twitter:description" content="最近看视频刚好看到关于 Java 自旋锁相关内容，结合实例代码做一个记录">
   
     <link rel="alternate" href="/atom.xml" title="Simon" type="application/atom+xml">
   
@@ -26,10 +28,12 @@
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
   
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 
 <body>
   <div id="container">
@@ -67,12 +71,12 @@
       <div class="outer">
         <section id="main"><article id="post-Java-自旋锁" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2020/03/19/Java-自旋锁/" class="article-date">
+    <a href="/2020/03/19/Java-%E8%87%AA%E6%97%8B%E9%94%81/" class="article-date">
   <time datetime="2020-03-19T13:14:13.000Z" itemprop="datePublished">2020-03-19</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/基础/">基础</a>
+    <a class="article-category-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a>
   </div>
 
   </div>
@@ -92,25 +96,29 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>最近看视频刚好看到关于 Java 自旋锁相关内容，结合实例代码做一个记录</p>
-<a id="more"></a>
+<span id="more"></span>
+
 <blockquote>
-<p>本文参考地址：<a href="https://segmentfault.com/a/1190000015795906" target="_blank" rel="noopener">面试必备之深入理解自旋锁</a></p>
+<p>本文参考地址：<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000015795906">面试必备之深入理解自旋锁</a></p>
 </blockquote>
 <h2 id="什么是自旋锁"><a href="#什么是自旋锁" class="headerlink" title="什么是自旋锁"></a>什么是自旋锁</h2><p>自旋锁是指当一个线程在获取锁的时候，如果锁已经被其它线程获取，那么该线程将循环等待，然后不断的判断锁是否能够被成功获取，直到获取到锁才会退出循环。</p>
 <h2 id="如何实现自旋锁"><a href="#如何实现自旋锁" class="headerlink" title="如何实现自旋锁"></a>如何实现自旋锁</h2><h3 id="简单例子-🌰"><a href="#简单例子-🌰" class="headerlink" title="简单例子 🌰"></a>简单例子 🌰</h3><p>下面代码是一个简单的自旋锁例子：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpinLock</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Thread&gt; cas = <span class="keyword">new</span> AtomicReference&lt;Thread&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Thread current = Thread.currentThread();</span><br><span class="line">        <span class="comment">// 利用CAS</span></span><br><span class="line">        <span class="keyword">while</span> (!cas.compareAndSet(<span class="keyword">null</span>, current)) &#123;</span><br><span class="line">            <span class="comment">// 等待获取线程锁</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Thread current = Thread.currentThread();</span><br><span class="line">        cas.compareAndSet(current, <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpinLock</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Thread&gt; cas = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;Thread&gt;();</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">current</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="comment">// 利用CAS</span></span><br><span class="line">        <span class="keyword">while</span> (!cas.compareAndSet(<span class="literal">null</span>, current)) &#123;</span><br><span class="line">            <span class="comment">// 等待获取线程锁</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">current</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        cas.compareAndSet(current, <span class="literal">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>存在的问题：<br>1、某个线程持有锁时间过长时，会导致其他线程一直处于等到状态，导致徒增 CPU 消耗<br>2、存在不公平情况，即等待时间长的线程不一定能优先获得锁</p>
 <h3 id="可重入锁🔐-和-不可重入锁🔐"><a href="#可重入锁🔐-和-不可重入锁🔐" class="headerlink" title="可重入锁🔐 和 不可重入锁🔐"></a>可重入锁🔐 和 不可重入锁🔐</h3><p>上述代码存在的问题：当线程 A 持有锁时，在线程 A 释放锁之前不可再次获得锁。而可重入锁需要保证线程 A 再次获取锁时，也有机会获得锁对象。</p>
-<p>优化代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cas</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Thread&gt; cas = <span class="keyword">new</span> AtomicReference&lt;Thread&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Thread currentThread = Thread.currentThread();</span><br><span class="line">        <span class="keyword">if</span> (currentThread == cas.get()) &#123;</span><br><span class="line">            count++;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (cas.compareAndSet(<span class="keyword">null</span>, currentThread)) &#123;</span><br><span class="line">            <span class="comment">// 等待获取线程锁</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Thread currentThread = Thread.currentThread();</span><br><span class="line">        <span class="keyword">if</span> (currentThread == cas.get() &amp;&amp; count &gt; <span class="number">0</span>) &#123; </span><br><span class="line">            count--;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">//当前线程重入数量为0，释放锁资源</span></span><br><span class="line">            cas.compareAndSet(currentThread, <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>优化代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Cas</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> AtomicReference&lt;Thread&gt; cas = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;Thread&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">currentThread</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="keyword">if</span> (currentThread == cas.get()) &#123;</span><br><span class="line">            count++;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (cas.compareAndSet(<span class="literal">null</span>, currentThread)) &#123;</span><br><span class="line">            <span class="comment">// 等待获取线程锁</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">Thread</span> <span class="variable">currentThread</span> <span class="operator">=</span> Thread.currentThread();</span><br><span class="line">        <span class="keyword">if</span> (currentThread == cas.get() &amp;&amp; count &gt; <span class="number">0</span>) &#123; </span><br><span class="line">            count--;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">//当前线程重入数量为0，释放锁资源</span></span><br><span class="line">            cas.compareAndSet(currentThread, <span class="literal">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>增加了一个线程「锁」计数器，当 A 线程的重入数量为0时，释放当前锁资源。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://simonxin.top/2020/03/19/Java-自旋锁/" data-id="ckbpsaen60009siz3fmsbmp0t" class="article-share-link">Share</a>
+      <a data-url="http://simonxin.top/2020/03/19/Java-%E8%87%AA%E6%97%8B%E9%94%81/" data-id="ckzbzfvk10008d1z488oruwnx" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Io流/">Io流</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/基础/">基础</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Io%E6%B5%81/" rel="tag">Io流</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li></ul>
 
     </footer>
   </div>
@@ -118,7 +126,7 @@
     
 <nav id="article-nav">
   
-    <a href="/2020/03/23/Mysql-的两种引擎/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2020/03/23/Mysql-%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%BC%95%E6%93%8E/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
@@ -128,7 +136,7 @@
     </a>
   
   
-    <a href="/2019/01/17/EOS-同步相关/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/01/17/EOS-%E5%90%8C%E6%AD%A5%E7%9B%B8%E5%85%B3/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">EOS 同步相关</div>
     </a>
@@ -146,7 +154,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GitHub/">GitHub	</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/区块链/">区块链</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/基础/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GitHub/">GitHub	</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%80%BB%E7%BB%93/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></li></ul>
     </div>
   </div>
 
@@ -156,7 +164,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EOS/">EOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Io流/">Io流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaWeb/">JavaWeb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/云服务/">云服务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/反思/">反思</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工作/">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/排序/">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/框架/">框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计/">设计</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EOS/" rel="tag">EOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/" rel="tag">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Io%E6%B5%81/" rel="tag">Io流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaWeb/" rel="tag">JavaWeb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1/" rel="tag">云服务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E6%80%9D/" rel="tag">反思</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C/" rel="tag">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag">技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A1%86%E6%9E%B6/" rel="tag">框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E9%AA%8C/" rel="tag">经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1/" rel="tag">设计</a></li></ul>
     </div>
   </div>
 
@@ -166,7 +174,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/EOS/" style="font-size: 10px;">EOS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Io流/" style="font-size: 11.67px;">Io流</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/JavaWeb/" style="font-size: 13.33px;">JavaWeb</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/XML/" style="font-size: 10px;">XML</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/云服务/" style="font-size: 10px;">云服务</a> <a href="/tags/区块链/" style="font-size: 10px;">区块链</a> <a href="/tags/反思/" style="font-size: 11.67px;">反思</a> <a href="/tags/基础/" style="font-size: 18.33px;">基础</a> <a href="/tags/工作/" style="font-size: 10px;">工作</a> <a href="/tags/开发/" style="font-size: 10px;">开发</a> <a href="/tags/总结/" style="font-size: 16.67px;">总结</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/排序/" style="font-size: 11.67px;">排序</a> <a href="/tags/数据结构/" style="font-size: 11.67px;">数据结构</a> <a href="/tags/框架/" style="font-size: 13.33px;">框架</a> <a href="/tags/生活/" style="font-size: 13.33px;">生活</a> <a href="/tags/算法/" style="font-size: 11.67px;">算法</a> <a href="/tags/经验/" style="font-size: 10px;">经验</a> <a href="/tags/设计/" style="font-size: 10px;">设计</a>
+      <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/EOS/" style="font-size: 10px;">EOS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Io%E6%B5%81/" style="font-size: 11.67px;">Io流</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/JavaWeb/" style="font-size: 13.33px;">JavaWeb</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/XML/" style="font-size: 10px;">XML</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1/" style="font-size: 10px;">云服务</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 10px;">区块链</a> <a href="/tags/%E5%8F%8D%E6%80%9D/" style="font-size: 11.67px;">反思</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.33px;">基础</a> <a href="/tags/%E5%B7%A5%E4%BD%9C/" style="font-size: 10px;">工作</a> <a href="/tags/%E5%BC%80%E5%8F%91/" style="font-size: 10px;">开发</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 16.67px;">总结</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 11.67px;">排序</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 11.67px;">数据结构</a> <a href="/tags/%E6%A1%86%E6%9E%B6/" style="font-size: 13.33px;">框架</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 13.33px;">生活</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 11.67px;">算法</a> <a href="/tags/%E7%BB%8F%E9%AA%8C/" style="font-size: 10px;">经验</a> <a href="/tags/%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">设计</a>
     </div>
   </div>
 
@@ -188,23 +196,23 @@
       <ul>
         
           <li>
-            <a href="/2020/06/21/如何使用-GitHub-的-Actions-实现项目的-CI-CD/">如何使用 GitHub 的 Actions 实现项目的 CI/CD</a>
+            <a href="/2020/06/21/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-GitHub-%E7%9A%84-Actions-%E5%AE%9E%E7%8E%B0%E9%A1%B9%E7%9B%AE%E7%9A%84-CI-CD/">如何使用 GitHub 的 Actions 实现项目的 CI/CD</a>
           </li>
         
           <li>
-            <a href="/2020/03/31/设计模式/">设计模式</a>
+            <a href="/2020/03/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
           </li>
         
           <li>
-            <a href="/2020/03/28/Mysql-生产环境用到的技术/">Mysql 生产环境用到的技术</a>
+            <a href="/2020/03/28/Mysql-%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E7%94%A8%E5%88%B0%E7%9A%84%E6%8A%80%E6%9C%AF/">Mysql 生产环境用到的技术</a>
           </li>
         
           <li>
-            <a href="/2020/03/23/Mysql-的两种引擎/">Mysql 的两种引擎</a>
+            <a href="/2020/03/23/Mysql-%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%BC%95%E6%93%8E/">Mysql 的两种引擎</a>
           </li>
         
           <li>
-            <a href="/2020/03/19/Java-自旋锁/">Java 自旋锁</a>
+            <a href="/2020/03/19/Java-%E8%87%AA%E6%97%8B%E9%94%81/">Java 自旋锁</a>
           </li>
         
       </ul>
@@ -219,7 +227,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2020 Simon<br>
+      &copy; 2022 Simon<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -237,11 +245,17 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
 
   </div>
 </body>

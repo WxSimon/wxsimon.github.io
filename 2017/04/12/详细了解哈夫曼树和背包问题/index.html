@@ -8,15 +8,15 @@
   <meta name="description" content="详细了解哈夫曼树和背包问题写在前面：  最近在疯狂复习数据结构和算法，虽然看完了一部完整的视频。但是转眼看看自己手中的《剑指Offer》里面还是不是很清楚。。。而且最近也突然觉得自己知识和别人比起来就是一个渣渣。各种被人家吊打。。。 这两个算法一个（哈夫曼树）是看最近视频动手实践的，一个(背包问题)是前段时间一个面试里面的题目，当时不知道这是一个系类的问题，昨天和大神聊完天之后才明白。所以乘着短暂">
 <meta property="og:type" content="article">
 <meta property="og:title" content="详细了解哈夫曼树和背包问题">
-<meta property="og:url" content="http://simonxin.top/2017/04/12/详细了解哈夫曼树和背包问题/index.html">
+<meta property="og:url" content="http://simonxin.top/2017/04/12/%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E5%92%8C%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Simon">
 <meta property="og:description" content="详细了解哈夫曼树和背包问题写在前面：  最近在疯狂复习数据结构和算法，虽然看完了一部完整的视频。但是转眼看看自己手中的《剑指Offer》里面还是不是很清楚。。。而且最近也突然觉得自己知识和别人比起来就是一个渣渣。各种被人家吊打。。。 这两个算法一个（哈夫曼树）是看最近视频动手实践的，一个(背包问题)是前段时间一个面试里面的题目，当时不知道这是一个系类的问题，昨天和大神聊完天之后才明白。所以乘着短暂">
-<meta property="og:locale" content="zh-Hans">
+<meta property="og:locale">
 <meta property="og:image" content="http://simonxin.top/images/17.4.11/huffmanTree.jpg">
-<meta property="og:updated_time" content="2020-06-21T09:49:22.916Z">
+<meta property="article:published_time" content="2017-04-12T06:47:16.000Z">
+<meta property="article:modified_time" content="2020-06-21T09:49:22.916Z">
+<meta property="article:author" content="Simon">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="详细了解哈夫曼树和背包问题">
-<meta name="twitter:description" content="详细了解哈夫曼树和背包问题写在前面：  最近在疯狂复习数据结构和算法，虽然看完了一部完整的视频。但是转眼看看自己手中的《剑指Offer》里面还是不是很清楚。。。而且最近也突然觉得自己知识和别人比起来就是一个渣渣。各种被人家吊打。。。 这两个算法一个（哈夫曼树）是看最近视频动手实践的，一个(背包问题)是前段时间一个面试里面的题目，当时不知道这是一个系类的问题，昨天和大神聊完天之后才明白。所以乘着短暂">
 <meta name="twitter:image" content="http://simonxin.top/images/17.4.11/huffmanTree.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Simon" type="application/atom+xml">
@@ -27,10 +27,12 @@
   
     <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
   
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
+
   
 
-</head>
+<meta name="generator" content="Hexo 6.0.0"></head>
 
 <body>
   <div id="container">
@@ -68,7 +70,7 @@
       <div class="outer">
         <section id="main"><article id="post-详细了解哈夫曼树和背包问题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/04/12/详细了解哈夫曼树和背包问题/" class="article-date">
+    <a href="/2017/04/12/%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E5%92%8C%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="article-date">
   <time datetime="2017-04-12T06:47:16.000Z" itemprop="datePublished">2017-04-12</time>
 </a>
     
@@ -88,49 +90,98 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="详细了解哈夫曼树和背包问题"><a href="#详细了解哈夫曼树和背包问题" class="headerlink" title="详细了解哈夫曼树和背包问题"></a>详细了解哈夫曼树和背包问题</h1><p><b>写在前面</b>：</p>
+        <h1 id="详细了解哈夫曼树和背包问题"><a href="#详细了解哈夫曼树和背包问题" class="headerlink" title="详细了解哈夫曼树和背包问题"></a>详细了解哈夫曼树和背包问题</h1><p><B>写在前面</b>：</p>
 <ul>
 <li>最近在疯狂复习数据结构和算法，虽然看完了一部完整的视频。但是转眼看看自己手中的《剑指Offer》里面还是不是很清楚。。。而且最近也突然觉得自己知识和别人比起来就是一个渣渣。各种被人家吊打。。。</li>
-<li><b>这两个算法一个（哈夫曼树）是看最近视频动手实践的，一个(背包问题)是前段时间一个面试里面的题目，当时不知道这是一个系类的问题，昨天和大神聊完天之后才明白。所以乘着短暂的热情还在就记录下来</b>先从哈夫曼树开始！！<a id="more"></a>
-</li>
+<li><b>这两个算法一个（哈夫曼树）是看最近视频动手实践的，一个(背包问题)是前段时间一个面试里面的题目，当时不知道这是一个系类的问题，昨天和大神聊完天之后才明白。所以乘着短暂的热情还在就记录下来</b>先从哈夫曼树开始！！ <span id="more"></span></li>
 </ul>
 <h3 id="1-哈夫曼树（实现基本的编码解码）"><a href="#1-哈夫曼树（实现基本的编码解码）" class="headerlink" title="1.哈夫曼树（实现基本的编码解码）"></a>1.哈夫曼树（实现基本的编码解码）</h3><ul>
 <li><p>简单定义：<br>   给定n个权值作为n个叶子结点，构造一棵二叉树，若带权路径长度达到最小，称这样的二叉树为最优二叉树，也称为哈夫曼树(Huffman Tree)。哈夫曼树是带权路径长度最短的树，权值较大的结点离根较近。</p>
-<p>  复杂的文字定义我觉得以后肯定不会看。。所以直接来一张哈夫曼树的构造过程简单明了。。<br>  <img src="/images/17.4.11/huffmanTree.jpg" alt=""></p>
+<p>  复杂的文字定义我觉得以后肯定不会看。。所以直接来一张哈夫曼树的构造过程简单明了。。<br>  <img src="/images/17.4.11/huffmanTree.jpg"></p>
 </li>
 </ul>
-<h4 id="1-模型构造"><a href="#1-模型构造" class="headerlink" title="1.模型构造"></a>1.模型构造</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 节点类</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Node</span>&gt; </span>&#123;</span><br><span class="line">		String data;</span><br><span class="line">		<span class="keyword">double</span> weight;</span><br><span class="line">		Node leftChild;</span><br><span class="line">		Node rightChild;</span><br><span class="line">		Node parent;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLeftChild</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> parent != <span class="keyword">null</span> &amp;&amp; <span class="keyword">this</span> == parent.leftChild;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(String data, <span class="keyword">double</span> weight)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">this</span>.data = data;</span><br><span class="line">			<span class="keyword">this</span>.weight = weight;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"Node [data="</span> + data + <span class="string">", weight="</span> + weight + <span class="string">"]"</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//队列排序依据</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Node o)</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> (<span class="keyword">int</span>) (weight - o.weight);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLeaf</span><span class="params">()</span> </span>&#123;</span><br><span class="line">			<span class="keyword">return</span> data.length() == <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-<p>包含属性:<br>| 属性 | 定义 | 类型 |<br>| —– | —– |  —- |<br>| data | 数据 | String |<br>| weight | 权值 | double |<br>| leftChild | 左节点 | Node |<br>| rightChild | 右节点 | Node |<br>| parent | 父节点 | Node |</p>
+<h4 id="1-模型构造"><a href="#1-模型构造" class="headerlink" title="1.模型构造"></a>1.模型构造</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 节点类</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Node</span> <span class="keyword">implements</span> <span class="title class_">Comparable</span>&lt;Node&gt; &#123;</span><br><span class="line">		String data;</span><br><span class="line">		<span class="type">double</span> weight;</span><br><span class="line">		Node leftChild;</span><br><span class="line">		Node rightChild;</span><br><span class="line">		Node parent;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isLeftChild</span><span class="params">()</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> parent != <span class="literal">null</span> &amp;&amp; <span class="built_in">this</span> == parent.leftChild;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">public</span> <span class="title function_">Node</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">public</span> <span class="title function_">Node</span><span class="params">(String data, <span class="type">double</span> weight)</span> &#123;</span><br><span class="line">			<span class="built_in">this</span>.data = data;</span><br><span class="line">			<span class="built_in">this</span>.weight = weight;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="string">&quot;Node [data=&quot;</span> + data + <span class="string">&quot;, weight=&quot;</span> + weight + <span class="string">&quot;]&quot;</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//队列排序依据</span></span><br><span class="line">		<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Node o)</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> (<span class="type">int</span>) (weight - o.weight);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isLeaf</span><span class="params">()</span> &#123;</span><br><span class="line">			<span class="keyword">return</span> data.length() == <span class="number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>包含属性:</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>定义</th>
+<th>类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>data</td>
+<td>数据</td>
+<td>String</td>
+</tr>
+<tr>
+<td>weight</td>
+<td>权值</td>
+<td>double</td>
+</tr>
+<tr>
+<td>leftChild</td>
+<td>左节点</td>
+<td>Node</td>
+</tr>
+<tr>
+<td>rightChild</td>
+<td>右节点</td>
+<td>Node</td>
+</tr>
+<tr>
+<td>parent</td>
+<td>父节点</td>
+<td>Node</td>
+</tr>
+</tbody></table>
 <h4 id="2-统计字符出现的次数，用出现的次数作为权值"><a href="#2-统计字符出现的次数，用出现的次数作为权值" class="headerlink" title="2.统计字符出现的次数，用出现的次数作为权值"></a>2.统计字符出现的次数，用出现的次数作为权值</h4><ul>
 <li>这里实现的思路是：将出现的字符串(C)和次数(count)保存为一个Map&lt;字符，次数&gt;对象,然后再保存为List集合</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Map&lt;Character, Integer&gt; <span class="title">statistics</span><span class="params">(<span class="keyword">char</span>[] charArray)</span> </span>&#123;</span><br><span class="line">	Map&lt;Character, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;Character, Integer&gt;();</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">char</span> c : charArray) &#123;</span><br><span class="line">		Character character = <span class="keyword">new</span> Character(c);</span><br><span class="line">		<span class="keyword">if</span> (map.containsKey(character)) &#123;</span><br><span class="line">			map.put(character, map.get(character) + <span class="number">1</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			map.put(character, <span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Node&gt; <span class="title">statisticsProbability</span><span class="params">(Map&lt;Character, Integer&gt; maps)</span> </span>&#123;</span><br><span class="line">	List&lt;Node&gt; list = <span class="keyword">new</span> ArrayList&lt;TestHuffmanTree_Encode_Decode.Node&gt;();</span><br><span class="line">	<span class="keyword">for</span> (Map.Entry&lt;Character, Integer&gt; map : maps.entrySet()) &#123;</span><br><span class="line">		Node node = <span class="keyword">new</span> Node(map.getKey().toString(), map.getValue());</span><br><span class="line">		list.add(node);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="3-根据统计的List进行哈夫曼树的构造"><a href="#3-根据统计的List进行哈夫曼树的构造" class="headerlink" title="3.根据统计的List进行哈夫曼树的构造"></a>3.根据统计的List进行哈夫曼树的构造</h4><p>首先List中保存的就是Node集合，其中Node的data就是字符串，Node的weight就是出现的次数也就是权值   </p>
-<p><b>哈夫曼树的构造:</b>   </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> Map&lt;Character, Integer&gt; <span class="title function_">statistics</span><span class="params">(<span class="type">char</span>[] charArray)</span> &#123;</span><br><span class="line">	Map&lt;Character, Integer&gt; map = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;Character, Integer&gt;();</span><br><span class="line">	<span class="keyword">for</span> (<span class="type">char</span> c : charArray) &#123;</span><br><span class="line">		<span class="type">Character</span> <span class="variable">character</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Character</span>(c);</span><br><span class="line">		<span class="keyword">if</span> (map.containsKey(character)) &#123;</span><br><span class="line">			map.put(character, map.get(character) + <span class="number">1</span>);</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			map.put(character, <span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> map;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Node&gt; <span class="title function_">statisticsProbability</span><span class="params">(Map&lt;Character, Integer&gt; maps)</span> &#123;</span><br><span class="line">	List&lt;Node&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;TestHuffmanTree_Encode_Decode.Node&gt;();</span><br><span class="line">	<span class="keyword">for</span> (Map.Entry&lt;Character, Integer&gt; map : maps.entrySet()) &#123;</span><br><span class="line">		<span class="type">Node</span> <span class="variable">node</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>(map.getKey().toString(), map.getValue());</span><br><span class="line">		list.add(node);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> list;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="3-根据统计的List进行哈夫曼树的构造"><a href="#3-根据统计的List进行哈夫曼树的构造" class="headerlink" title="3.根据统计的List进行哈夫曼树的构造"></a>3.根据统计的List进行哈夫曼树的构造</h4><p>首先List中保存的就是Node集合，其中Node的data就是字符串，Node的weight就是出现的次数也就是权值<br><B>哈夫曼树的构造:</B>   </p>
 <ul>
-<li>首先利用Java中的priorityQueue<e>方法进行模拟队列<br>priorityQueue<e>的用法<!-- 插入图片--> 
-其中主要的方法：<br>| 方法  | 作用  |<br>|—|—|<br>| add  | 将指定元素插入到次优先级队列  |<br>| poll  | 获取并且移除队列头  |<br>|  peek | 获取但是不移出队列  |</e></e></li>
-<li>将List中的数据保存到队列里面去 </li>
+<li>首先利用Java中的priorityQueue<E>方法进行模拟队列<br> priorityQueue<E>的用法 <!-- 插入图片--> 
+ 其中主要的方法：<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>add</td>
+<td>将指定元素插入到次优先级队列</td>
+</tr>
+<tr>
+<td>poll</td>
+<td>获取并且移除队列头</td>
+</tr>
+<tr>
+<td>peek</td>
+<td>获取但是不移出队列</td>
+</tr>
+</tbody></table>
+</li>
+<li>将List中的数据保存到队列里面去</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  PriorityQueue&lt;Node&gt; priorityQueue = <span class="keyword">new</span> PriorityQueue&lt;Node&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nodes.size(); i++) &#123;</span><br><span class="line">	priorityQueue.add(nodes.get(i));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">  PriorityQueue&lt;Node&gt; priorityQueue = <span class="keyword">new</span> <span class="title class_">PriorityQueue</span>&lt;Node&gt;();</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; nodes.size(); i++) &#123;</span><br><span class="line">	priorityQueue.add(nodes.get(i));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
-<li><b>然后利用poll方法获取队列头节点</b>,这里可能就由疑问了，哈夫曼树不是要求按照权值最小的两个开始组成树嘛。这里为什么随便从队列里面弄两个出来就可以。<br>其实是这样的;在Node定义的时候实现了Comparable<node>接口并且实现了compareTo（E e）方法，这里其实就已经实现了队列里面的排序<!--插入图片--></node></li>
+<li><b>然后利用poll方法获取队列头节点</b>,这里可能就由疑问了，哈夫曼树不是要求按照权值最小的两个开始组成树嘛。这里为什么随便从队列里面弄两个出来就可以。<br>其实是这样的;在Node定义的时候实现了Comparable<Node>接口并且实现了compareTo（E e）方法，这里其实就已经实现了队列里面的排序<!--插入图片--></li>
 <li>然后构建两个子节点的父节点，并且声明三者之间的关系(父子，左右)</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">         <span class="comment">// 构建父节点</span></span><br><span class="line">Node sumNode = <span class="keyword">new</span> Node(node1.data + node2.data, node1.weight</span><br><span class="line">		+ node2.weight);</span><br><span class="line"></span><br><span class="line">sumNode.leftChild = node1;</span><br><span class="line">sumNode.rightChild = node2;</span><br><span class="line"></span><br><span class="line">node1.parent = sumNode;</span><br><span class="line">node2.parent = sumNode;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">         <span class="comment">// 构建父节点</span></span><br><span class="line"><span class="type">Node</span> <span class="variable">sumNode</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Node</span>(node1.data + node2.data, node1.weight</span><br><span class="line">		+ node2.weight);</span><br><span class="line"></span><br><span class="line">sumNode.leftChild = node1;</span><br><span class="line">sumNode.rightChild = node2;</span><br><span class="line"></span><br><span class="line">node1.parent = sumNode;</span><br><span class="line">node2.parent = sumNode;</span><br></pre></td></tr></table></figure>
 <ul>
-<li><p>然后再将父节点保存到队列中去:这样做的目的是为了得到根节点</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">priorityQueue.add(sumNode);</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>最后返回根节点 priorityQueue.poll();</p>
-</li>
+<li>然后再将父节点保存到队列中去:这样做的目的是为了得到根节点<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">priorityQueue.add(sumNode);</span><br></pre></td></tr></table></figure></li>
+<li>最后返回根节点 priorityQueue.poll();</li>
 </ul>
-<p><b>这样，到这里哈夫曼树的构建就完成了，但是既然学习了就深入一点，<br>哈夫曼树的最长用途就是用来文件压缩，因为我们知道发送一句话的时候并不是每个字母出现的频率都是一样的，有的出现的多有的出现的少，但是如果还是使用一样额编码那样会有很大的消耗，所以这里我们就用哈夫曼树实现对字符串的编码和解码</b></p>
+<p><B>这样，到这里哈夫曼树的构建就完成了，但是既然学习了就深入一点，<br>哈夫曼树的最长用途就是用来文件压缩，因为我们知道发送一句话的时候并不是每个字母出现的频率都是一样的，有的出现的多有的出现的少，但是如果还是使用一样额编码那样会有很大的消耗，所以这里我们就用哈夫曼树实现对字符串的编码和解码</b></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://simonxin.top/2017/04/12/详细了解哈夫曼树和背包问题/" data-id="ckbpsaeo30023siz3nsqdbhlh" class="article-share-link">Share</a>
+      <a data-url="http://simonxin.top/2017/04/12/%E8%AF%A6%E7%BB%86%E4%BA%86%E8%A7%A3%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E5%92%8C%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" data-id="ckzbzfvko001xd1z4b1k6lhml" class="article-share-link">Share</a>
       
       
     </footer>
@@ -139,7 +190,7 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/05/08/最近状态总结/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/05/08/%E6%9C%80%E8%BF%91%E7%8A%B6%E6%80%81%E6%80%BB%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
@@ -149,7 +200,7 @@
     </a>
   
   
-    <a href="/2017/03/14/Android开源框架总结/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/03/14/Android%E5%BC%80%E6%BA%90%E6%A1%86%E6%9E%B6%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Android开源框架总结</div>
     </a>
@@ -167,7 +218,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GitHub/">GitHub	</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/区块链/">区块链</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/基础/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据结构与算法/">数据结构与算法</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/GitHub/">GitHub	</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaWeb/">JavaWeb</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Mysql/">Mysql</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9F%BA%E7%A1%80/">基础</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%80%BB%E7%BB%93/">总结</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%8A%80%E6%9C%AF/">技术</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法</a></li></ul>
     </div>
   </div>
 
@@ -177,7 +228,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EOS/">EOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Io流/">Io流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaWeb/">JavaWeb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/云服务/">云服务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/区块链/">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/反思/">反思</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/基础/">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工作/">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/开发/">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/总结/">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/排序/">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/数据结构/">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/框架/">框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/生活/">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/经验/">经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计/">设计</a></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Android/" rel="tag">Android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/" rel="tag">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EOS/" rel="tag">EOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/" rel="tag">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Io%E6%B5%81/" rel="tag">Io流</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaWeb/" rel="tag">JavaWeb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/XML/" rel="tag">XML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/" rel="tag">github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1/" rel="tag">云服务</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" rel="tag">区块链</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%8D%E6%80%9D/" rel="tag">反思</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag">基础</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%B7%A5%E4%BD%9C/" rel="tag">工作</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%BB%E7%BB%93/" rel="tag">总结</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%80%E6%9C%AF/" rel="tag">技术</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F/" rel="tag">排序</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A1%86%E6%9E%B6/" rel="tag">框架</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%B4%BB/" rel="tag">生活</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BB%8F%E9%AA%8C/" rel="tag">经验</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BE%E8%AE%A1/" rel="tag">设计</a></li></ul>
     </div>
   </div>
 
@@ -187,7 +238,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/EOS/" style="font-size: 10px;">EOS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Io流/" style="font-size: 11.67px;">Io流</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/JavaWeb/" style="font-size: 13.33px;">JavaWeb</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/XML/" style="font-size: 10px;">XML</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/云服务/" style="font-size: 10px;">云服务</a> <a href="/tags/区块链/" style="font-size: 10px;">区块链</a> <a href="/tags/反思/" style="font-size: 11.67px;">反思</a> <a href="/tags/基础/" style="font-size: 18.33px;">基础</a> <a href="/tags/工作/" style="font-size: 10px;">工作</a> <a href="/tags/开发/" style="font-size: 10px;">开发</a> <a href="/tags/总结/" style="font-size: 16.67px;">总结</a> <a href="/tags/技术/" style="font-size: 10px;">技术</a> <a href="/tags/排序/" style="font-size: 11.67px;">排序</a> <a href="/tags/数据结构/" style="font-size: 11.67px;">数据结构</a> <a href="/tags/框架/" style="font-size: 13.33px;">框架</a> <a href="/tags/生活/" style="font-size: 13.33px;">生活</a> <a href="/tags/算法/" style="font-size: 11.67px;">算法</a> <a href="/tags/经验/" style="font-size: 10px;">经验</a> <a href="/tags/设计/" style="font-size: 10px;">设计</a>
+      <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/EOS/" style="font-size: 10px;">EOS</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Io%E6%B5%81/" style="font-size: 11.67px;">Io流</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/JavaWeb/" style="font-size: 13.33px;">JavaWeb</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/XML/" style="font-size: 10px;">XML</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1/" style="font-size: 10px;">云服务</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 10px;">区块链</a> <a href="/tags/%E5%8F%8D%E6%80%9D/" style="font-size: 11.67px;">反思</a> <a href="/tags/%E5%9F%BA%E7%A1%80/" style="font-size: 18.33px;">基础</a> <a href="/tags/%E5%B7%A5%E4%BD%9C/" style="font-size: 10px;">工作</a> <a href="/tags/%E5%BC%80%E5%8F%91/" style="font-size: 10px;">开发</a> <a href="/tags/%E6%80%BB%E7%BB%93/" style="font-size: 16.67px;">总结</a> <a href="/tags/%E6%8A%80%E6%9C%AF/" style="font-size: 10px;">技术</a> <a href="/tags/%E6%8E%92%E5%BA%8F/" style="font-size: 11.67px;">排序</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 11.67px;">数据结构</a> <a href="/tags/%E6%A1%86%E6%9E%B6/" style="font-size: 13.33px;">框架</a> <a href="/tags/%E7%94%9F%E6%B4%BB/" style="font-size: 13.33px;">生活</a> <a href="/tags/%E7%AE%97%E6%B3%95/" style="font-size: 11.67px;">算法</a> <a href="/tags/%E7%BB%8F%E9%AA%8C/" style="font-size: 10px;">经验</a> <a href="/tags/%E8%AE%BE%E8%AE%A1/" style="font-size: 10px;">设计</a>
     </div>
   </div>
 
@@ -209,23 +260,23 @@
       <ul>
         
           <li>
-            <a href="/2020/06/21/如何使用-GitHub-的-Actions-实现项目的-CI-CD/">如何使用 GitHub 的 Actions 实现项目的 CI/CD</a>
+            <a href="/2020/06/21/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-GitHub-%E7%9A%84-Actions-%E5%AE%9E%E7%8E%B0%E9%A1%B9%E7%9B%AE%E7%9A%84-CI-CD/">如何使用 GitHub 的 Actions 实现项目的 CI/CD</a>
           </li>
         
           <li>
-            <a href="/2020/03/31/设计模式/">设计模式</a>
+            <a href="/2020/03/31/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
           </li>
         
           <li>
-            <a href="/2020/03/28/Mysql-生产环境用到的技术/">Mysql 生产环境用到的技术</a>
+            <a href="/2020/03/28/Mysql-%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E7%94%A8%E5%88%B0%E7%9A%84%E6%8A%80%E6%9C%AF/">Mysql 生产环境用到的技术</a>
           </li>
         
           <li>
-            <a href="/2020/03/23/Mysql-的两种引擎/">Mysql 的两种引擎</a>
+            <a href="/2020/03/23/Mysql-%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%BC%95%E6%93%8E/">Mysql 的两种引擎</a>
           </li>
         
           <li>
-            <a href="/2020/03/19/Java-自旋锁/">Java 自旋锁</a>
+            <a href="/2020/03/19/Java-%E8%87%AA%E6%97%8B%E9%94%81/">Java 自旋锁</a>
           </li>
         
       </ul>
@@ -240,7 +291,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2020 Simon<br>
+      &copy; 2022 Simon<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
@@ -258,11 +309,17 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
 
   </div>
 </body>
