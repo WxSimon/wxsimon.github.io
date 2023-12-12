@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.simoncode.top","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="如何开发一个自己的 RPC 框架 (二)上篇文章中，从客户端的调用流程，详细的了解了各个环节的数据是如何串联起来的。那么本章内容，将主要从注册中心的角度出发，看看注册中心是如何维护客户端和服务端各自上报的信息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何开发一个自己的 RPC 框架 (二)">
+<meta property="og:url" content="http://blog.simoncode.top/2023/12/12/28-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%20RPC%20%E6%A1%86%E6%9E%B6%20(%E4%BA%8C)/index.html">
+<meta property="og:site_name" content="Simon">
+<meta property="og:description" content="如何开发一个自己的 RPC 框架 (二)上篇文章中，从客户端的调用流程，详细的了解了各个环节的数据是如何串联起来的。那么本章内容，将主要从注册中心的角度出发，看看注册中心是如何维护客户端和服务端各自上报的信息。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-12-12T07:07:51.000Z">
+<meta property="article:modified_time" content="2023-12-12T08:50:31.152Z">
+<meta property="article:author" content="Simon">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.simoncode.top/2023/12/12/28-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%20RPC%20%E6%A1%86%E6%9E%B6%20(%E4%BA%8C)/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://blog.simoncode.top/2023/12/12/28-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%20RPC%20%E6%A1%86%E6%9E%B6%20(%E4%BA%8C)/","path":"2023/12/12/28-如何开发一个自己的 RPC 框架 (二)/","title":"如何开发一个自己的 RPC 框架 (二)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何开发一个自己的 RPC 框架 (二) | Simon</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Simon</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84-RPC-%E6%A1%86%E6%9E%B6-%E4%BA%8C"><span class="nav-number">1.</span> <span class="nav-text">如何开发一个自己的 RPC 框架 (二)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%9F%E8%83%BD%E6%A2%B3%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">功能梳理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89"><span class="nav-number">1.2.</span> <span class="nav-text">接口定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96"><span class="nav-number">1.3.</span> <span class="nav-text">配置文件读取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zookeeper-%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.</span> <span class="nav-text">zookeeper 接口实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.4.1.</span> <span class="nav-text">成员变量介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#register-%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.2.</span> <span class="nav-text">register 方法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#initProviderMap-%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9%E6%96%B9%E8%8A%82%E7%82%B9%E8%8E%B7%E5%8F%96"><span class="nav-number">1.4.3.</span> <span class="nav-text">initProviderMap 服务消费方节点获取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getServiceProducer-%E6%9C%8D%E5%8A%A1%E6%B6%88%E8%B4%B9%E6%96%B9%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E8%8A%82%E7%82%B9"><span class="nav-number">1.4.4.</span> <span class="nav-text">getServiceProducer 服务消费方获取服务节点</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Simon"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">Simon</p>
+  <div class="site-description" itemprop="description">Hello World !</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/wxsimon" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;wxsimon" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:simon_code@163.com" title="E-Mail → mailto:simon_code@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2495174663" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2495174663" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://blog.simoncode.top/2023/12/12/28-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%20RPC%20%E6%A1%86%E6%9E%B6%20(%E4%BA%8C)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="Simon">
+      <meta itemprop="description" content="Hello World !">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何开发一个自己的 RPC 框架 (二)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+      
+
+      <time title="Created: 2023-12-12 15:07:51 / Modified: 16:50:31" itemprop="dateCreated datePublished" datetime="2023-12-12T15:07:51+08:00">2023-12-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="如何开发一个自己的-RPC-框架-二"><a href="#如何开发一个自己的-RPC-框架-二" class="headerlink" title="如何开发一个自己的 RPC 框架 (二)"></a>如何开发一个自己的 RPC 框架 (二)</h1><p>上篇文章中，从客户端的调用流程，详细的了解了各个环节的数据是如何串联起来的。那么本章内容，将主要从注册中心的角度出发，看看注册中心是如何维护客户端和服务端各自上报的信息。</p>
+<span id="more"></span>
+
+<p>能够作为注册中心的中间件非常多，常见的比如 <strong><a target="_blank" rel="noopener" href="https://zookeeper.apache.org/">ZooKeeper</a>、</strong><a target="_blank" rel="noopener" href="https://www.consul.io/">Consul</a>、**<a target="_blank" rel="noopener" href="https://nacos.io/en-us/">Nacos</a>** 等，本项目中采用的是  Zookeeper 作为注册中心中间件</p>
+<h2 id="功能梳理"><a href="#功能梳理" class="headerlink" title="功能梳理"></a>功能梳理</h2><p>同样，开始之前我们先来理一下注册中心主要实现那些功能</p>
+<pre class="mermaid">flowchart TD
+    注册中心 --> 维护服务提供方节点信息
+    注册中心 --> 维护服务消费方节点信息
+    注册中心 --> 服务消费方服务信息订阅</pre>
+
+<h2 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h2><p>定义一个名为 <code>IRegisterCenter</code> 的接口，其中接口主要实现如下功能：</p>
+<ol>
+<li>服务提供方的节点上报</li>
+<li>服务提供方节点信息更新</li>
+<li>服务提供方的本地数据缓存和节点信息订阅</li>
+<li>服务消费方根据服务名获取节点地址</li>
+<li>服务消费方订阅服务节点信息</li>
+<li>服务消费方信息注册</li>
+</ol>
+<p>有了上面 6 大需求，就可以知道接口接口中主要包含的方法如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// IRegisterCenter.class</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">IRegisterCenter</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 服务提供方节点注册</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">register</span><span class="params">(List&lt;Producer&gt; producerList)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 服务提供方获取节点列表</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Map&lt;String, List&lt;Producer&gt;&gt; <span class="title function_">getProducersMap</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 服务提供方服务销毁</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">(String name)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 服务消费方初始化服务节点列表</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> remoteAppKey 服务提供者唯一标识</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> groupName    服务组名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">initProviderMap</span><span class="params">(String remoteAppKey, String groupName)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 服务消费方获取所有节点列表</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    List&lt;Producer&gt; <span class="title function_">getServiceNode</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 服务消费方获取节点信息</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> serviceName 服务名称</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> methodName  服务方法名称</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    List&lt;Producer&gt; <span class="title function_">getServiceProducer</span><span class="params">(String serviceName, String methodName)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注册服务消费者信息 用于监控</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">registerConsumer</span><span class="params">(Consumer consumer)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置文件读取"><a href="#配置文件读取" class="headerlink" title="配置文件读取"></a>配置文件读取</h2><p>注册中心的接口定义完成之后，就需要使用 zookeeper 进行接口实现。但是在接口实现之前，需要实现一个帮助方法读取 RPC 框架的相关配置项。</p>
+<p>根据前面的设计，可以大概罗列一下需要用到的配置参数</p>
+<ol>
+<li>appkey: 服务的唯一标识</li>
+<li>groupName: 服务的分组名称</li>
+<li>zookServer: zk 中间件服务地址</li>
+<li>nettyIp: 服务提供方调用地址</li>
+<li>nettyPort: 服务提供方调用端口</li>
+</ol>
+<p>当然还包含一些其他参数，比如服务调用超时时间、服务会话超时时间等</p>
+<p>完成上面需求整理之后，就可以开始 <code>RpcPropertiesUtil</code> 方法的编写了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RpcPropertiesUtil</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, Object&gt; PRODUCER_MAP;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">PROPERTIES_FILE_NAME</span> <span class="operator">=</span> <span class="string">&quot;rpc.properties&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        PRODUCER_MAP = Maps.newConcurrentMap();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">Properties</span> <span class="variable">properties</span> <span class="operator">=</span> PropertiesLoaderUtils.loadAllProperties(PROPERTIES_FILE_NAME);</span><br><span class="line">            <span class="keyword">for</span> (Map.Entry&lt;Object, Object&gt; entry : properties.entrySet()) &#123;</span><br><span class="line">                PRODUCER_MAP.put(entry.getKey().toString(), entry.getValue());</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;读取配置文件异常&quot;</span>, e);</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;Producer Load Properties Exception&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 先从环境变量读取</span></span><br><span class="line">		<span class="keyword">private</span> <span class="keyword">static</span> String <span class="title function_">getString</span><span class="params">(Map&lt;String, Object&gt; map, String key, String defaultValue)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">envKey</span> <span class="operator">=</span> System.getenv().get(key.toUpperCase());</span><br><span class="line">        <span class="type">String</span> <span class="variable">result</span> <span class="operator">=</span> envKey != <span class="literal">null</span> ? envKey : MapUtils.getString(map, key);</span><br><span class="line">        <span class="keyword">return</span> StringUtils.isEmpty(result) ? defaultValue : result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Integer <span class="title function_">getInteger</span><span class="params">(Map&lt;String, Object&gt; map, String key, Integer defaultValue)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">envKey</span> <span class="operator">=</span> System.getenv().get(key.toUpperCase());</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">result</span> <span class="operator">=</span> envKey != <span class="literal">null</span> ? Integer.parseInt(envKey) : MapUtils.getInteger(map, key);</span><br><span class="line">        <span class="type">return</span> <span class="variable">result</span> <span class="operator">=</span>= <span class="literal">null</span> ? defaultValue : result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>定义一个 <code>PRODUCER_MAP</code> 用来做配置文件缓存</li>
+<li>static 静态方法中，读取 <code>[rpc.properties](http://rpc.properties)</code> 配置文件，转换成 Map</li>
+<li>定义了两个 <code>getString</code> 和 <code>getInteger</code> 的方法，表示先从环境变量中读取配置，不存在时从配置文件中读取</li>
+</ol>
+<p>完成上述基础编写之后，实例一个 <code>rpc_app_key</code> 的读取</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">getAppKey</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> getString(PRODUCER_MAP, <span class="string">&quot;rpc_app_key&quot;</span>, <span class="string">&quot;test&quot;</span>);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="zookeeper-接口实现"><a href="#zookeeper-接口实现" class="headerlink" title="zookeeper 接口实现"></a>zookeeper 接口实现</h2><p>由于接口的方法都已经定义完成，只需要根据接口的方法含义，进行对应的实现即可</p>
+<p>定义一个类 <code>IRegisterCenterZkImpl</code> 实现 <code>IRegisterCenter</code> 接口</p>
+<h3 id="成员变量介绍"><a href="#成员变量介绍" class="headerlink" title="成员变量介绍"></a>成员变量介绍</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">IRegisterCenterZkImpl</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IRegisterCenterZkImpl</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">ZkClient</span> <span class="variable">zkClient</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ZK 相关信息</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">ZK_ADDRESS</span> <span class="operator">=</span> RpcPropertiesUtil.getZkServers();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">ZK_SESSION_TIMEOUT</span> <span class="operator">=</span> RpcPropertiesUtil.getSessionTimeout();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">ZK_CONNECTION_TIMEOUT</span> <span class="operator">=</span> RpcPropertiesUtil.getConnectionTimeout();</span><br><span class="line">    <span class="comment">// 本地服务地址</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">LOCAL_IP</span> <span class="operator">=</span> RpcPropertiesUtil.getServerIp();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 服务缓存(服务端缓存)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, List&lt;Producer&gt;&gt; PROVIDER_MAP = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();</span><br><span class="line">    <span class="comment">// 服务缓存(客户端缓存)</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, List&lt;Producer&gt;&gt; SERVICE_METADATA = Maps.newConcurrentMap();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ZK 的服务地址</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">ROOT_PATH</span> <span class="operator">=</span> <span class="string">&quot;/config_register&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">PROVIDER_TYPE</span> <span class="operator">=</span> <span class="string">&quot;/provider&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">CONSUMER_TYPE</span> <span class="operator">=</span> <span class="string">&quot;/consumer&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * service name to bean map</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, Object&gt; PRODUCER_BEAN_MAP = Maps.newConcurrentMap();</span><br></pre></td></tr></table></figure>
+
+<h3 id="register-方法实现"><a href="#register-方法实现" class="headerlink" title="register 方法实现"></a>register 方法实现</h3><p><code>register</code> 应该是整个注册中心最重要的方法了，他主要目的是接收服务提供方的节点信息上报</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//IRegisterCenterZkImpl.class</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">register</span><span class="params">(List&lt;Producer&gt; producerList)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (CollectionUtils.isEmpty(producerList)) &#123;</span><br><span class="line">            log.debug(<span class="string">&quot;RegisterCenterImpl registerProvider providers is empty, ignore it, providers=&#123;&#125;&quot;</span>, producerList);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">synchronized</span> (IRegisterCenterZkImpl.class) &#123;</span><br><span class="line">            <span class="comment">// 初始化 zk 客户端</span></span><br><span class="line">            <span class="number">1</span>️⃣ <span class="built_in">this</span>.initZkClient();</span><br><span class="line"></span><br><span class="line">						<span class="comment">// 本地缓存</span></span><br><span class="line">            <span class="number">2</span>️⃣ <span class="built_in">this</span>.setLocalCache(producerList);							</span><br><span class="line">            <span class="number">3</span>️⃣ <span class="keyword">for</span> (Map.Entry&lt;String, List&lt;Producer&gt;&gt; entry : PROVIDER_MAP.entrySet()) &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">serviceName</span> <span class="operator">=</span> entry.getKey();</span><br><span class="line">                List&lt;Producer&gt; producers = entry.getValue();</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 创建根节点</span></span><br><span class="line">                <span class="type">Producer</span> <span class="variable">firstProducer</span> <span class="operator">=</span> producers.get(<span class="number">0</span>);</span><br><span class="line">                <span class="type">String</span> <span class="variable">appKey</span> <span class="operator">=</span> firstProducer.getAppKey();</span><br><span class="line">                <span class="type">String</span> <span class="variable">rootNode</span> <span class="operator">=</span> getRootPath(appKey);</span><br><span class="line">               <span class="number">4</span>️⃣ <span class="built_in">this</span>.createRootNode(rootNode);</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 服务组名</span></span><br><span class="line">                <span class="type">String</span> <span class="variable">groupName</span> <span class="operator">=</span> firstProducer.getGroupName();</span><br><span class="line">                <span class="comment">// 创建服务提供者节点</span></span><br><span class="line">              <span class="number">5</span>️⃣  <span class="type">String</span> <span class="variable">servicePath</span> <span class="operator">=</span> getProducerServicePath(appKey, groupName, serviceName);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> (Producer producer : producers) &#123;</span><br><span class="line">                    <span class="built_in">this</span>.createServiceNode(servicePath);</span><br><span class="line">                    <span class="type">String</span> <span class="variable">producerMathodPath</span> <span class="operator">=</span> producerToPath(servicePath, producer);</span><br><span class="line">                <span class="number">6</span>️⃣  <span class="built_in">this</span>.createCurrentServiceIpNode(producerMathodPath);</span><br><span class="line">                    log.debug(<span class="string">&quot;create current service node success, node path = &#123;&#125; ,method path = &#123;&#125;&quot;</span>, servicePath, producerMathodPath);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 本地监听</span></span><br><span class="line">                <span class="number">7</span>️⃣ subscribeChildChanges(serviceName, servicePath, PROVIDER_MAP);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>1️⃣：本地初始化 zk 的请求客户端</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//IRegisterCenterZkImpl.class</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">initZkClient</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (zkClient == <span class="literal">null</span>) &#123;</span><br><span class="line">            zkClient = <span class="keyword">new</span> <span class="title class_">ZkClient</span>(ZK_ADDRESS, ZK_SESSION_TIMEOUT, ZK_CONNECTION_TIMEOUT);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>对象定义成员变量 <code>zkClient</code></p>
+<p>2️⃣：设置本地节点缓存</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//IRegisterCenterZkImpl.class</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">setLocalCache</span><span class="params">(List&lt;Producer&gt; producerList)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (Producer producer : producerList) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> producer.getServiceItf().getName();</span><br><span class="line">            List&lt;Producer&gt; producerListCache = PROVIDER_MAP.get(name);</span><br><span class="line">            <span class="keyword">if</span> (producerListCache == <span class="literal">null</span>) &#123;</span><br><span class="line">                producerListCache = Lists.newArrayList();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            producerListCache.add(producer);</span><br><span class="line">            PROVIDER_MAP.put(name, producerListCache);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>存在本地成员变量 <code>PROVIDER_MAP</code>，其中 Map 的 Key 为服务接口的类名</p>
+<p>3️⃣：根据类名遍历节点信息</p>
+<p>4️⃣：创建根节点信息，根节点地址为 <code>/config_register/&#123;appKey&#125;</code></p>
+<p>5️⃣：根据服务名称创建服务节点信息，服务节点地址为: <code>/config_register/&#123;appKey&#125;/&#123;groupName&#125;/&#123;serviceName&#125;</code> 其中 <code>serviceName</code> 就是服务接口的类名</p>
+<p>6️⃣：根据接口类名创建具体的方法节点信息,其中 <code>producerToPath</code> 方法，主要目的是将 <code>Producer</code> 对象转换成 Zk 的路径信息，其中主要实现如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> String <span class="title function_">producerToPath</span><span class="params">(String servicePath, Producer producer)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> servicePath + <span class="string">&quot;/&quot;</span> + producer.getIp() + <span class="string">&quot;|&quot;</span></span><br><span class="line">                + producer.getPort() + <span class="string">&quot;|&quot;</span></span><br><span class="line">                + producer.getWeight() + <span class="string">&quot;|&quot;</span></span><br><span class="line">                + producer.getWorkerThreads() + <span class="string">&quot;|&quot;</span></span><br><span class="line">                + producer.getMethod().getName() + <span class="string">&quot;|&quot;</span></span><br><span class="line">                + producer.getGroupName();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p> 返回的地址信息示例如下: <code>/config_register/&#123;appKey&#125;/&#123;groupName&#125;/&#123;serviceName&#125;/127.0.0.1|9999|1|10|get|defaut</code> </p>
+<p><code>127.0.0.1|9999|1|10|get|defaut</code> 这段参数的含义就是：服务地址 + 服务端口 + 权重 + 工作线程数量 + 方法名称 + 服务组名称</p>
+<p><code>createCurrentServiceIpNode</code> 方法实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">createCurrentServiceIpNode</span><span class="params">(String currentServiceIpNode)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (!zkClient.exists(currentServiceIpNode)) &#123;</span><br><span class="line">            <span class="comment">// 临时节点</span></span><br><span class="line">            zkClient.createEphemeral(currentServiceIpNode);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>7️⃣：服务地址监听</p>
+<p><code>subscribeChildChanges</code> 方法的实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">subscribeChildChanges</span><span class="params">(String serviceName, String servicePath, Map&lt;String, List&lt;Producer&gt;&gt; dataMap)</span> &#123;</span><br><span class="line">        <span class="comment">// 1. 从 zk 中读取路径</span></span><br><span class="line">        <span class="comment">// 2. 根据路径值 反序列化成 producer 对象</span></span><br><span class="line">        <span class="comment">// 3. 将 producer 对象放入 dataMap 中</span></span><br><span class="line">        zkClient.subscribeChildChanges(servicePath, (parentPath, currentChilds) -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (currentChilds == <span class="literal">null</span>) &#123;</span><br><span class="line">                currentChilds = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            List&lt;Producer&gt; producers = currentChilds.stream().map(currentChild -&gt; pathToProducer(serviceName, currentChild)).collect(Collectors.toList());</span><br><span class="line">            dataMap.put(serviceName, producers);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="initProviderMap-服务消费方节点获取"><a href="#initProviderMap-服务消费方节点获取" class="headerlink" title="initProviderMap 服务消费方节点获取"></a>initProviderMap 服务消费方节点获取</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">initProviderMap</span><span class="params">(String remoteAppKey, String groupName)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (MapUtils.isEmpty(SERVICE_METADATA)) &#123;</span><br><span class="line">            SERVICE_METADATA.putAll(<span class="built_in">this</span>.fetchOrUpdateServiceMetaData(remoteAppKey, groupName));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> Map&lt;String, List&lt;Producer&gt;&gt; <span class="title function_">fetchOrUpdateServiceMetaData</span><span class="params">(String remoteAppKey, String groupName)</span> &#123;</span><br><span class="line">        <span class="keyword">final</span> Map&lt;String, List&lt;Producer&gt;&gt; providerServiceMap = Maps.newHashMap();</span><br><span class="line">        <span class="built_in">this</span>.initZkClient();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 根据分组获取服务提供方的地址</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">providerNode</span> <span class="operator">=</span> getRootPath(remoteAppKey) + UrlConstants.SLASH + groupName;</span><br><span class="line">        <span class="comment">// 获取所有 serverName 地址</span></span><br><span class="line">       <span class="number">1</span>️⃣ List&lt;String&gt; producerServices = zkClient.getChildren(providerNode);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (String serviceName : producerServices) &#123;</span><br><span class="line">             <span class="type">String</span> <span class="variable">servicePath</span> <span class="operator">=</span> getProducerServicePath(remoteAppKey, groupName, serviceName);</span><br><span class="line">            <span class="number">2</span>️⃣ List&lt;String&gt; producerPaths = zkClient.getChildren(servicePath);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 获取所有 producer 地址(method)</span></span><br><span class="line">            <span class="keyword">for</span> (String producerPath : producerPaths) &#123;</span><br><span class="line">              <span class="number">3</span>️⃣  <span class="type">Producer</span> <span class="variable">pathToProducer</span> <span class="operator">=</span> pathToProducer(serviceName, producerPath);</span><br><span class="line">                List&lt;Producer&gt; providerList = providerServiceMap.get(serviceName);</span><br><span class="line">                <span class="keyword">if</span> (providerList == <span class="literal">null</span>) &#123;</span><br><span class="line">                    providerList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                providerList.add(pathToProducer);</span><br><span class="line">            <span class="number">4</span>️⃣     providerServiceMap.put(serviceName, providerList);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="number">5</span>️⃣ subscribeChildChanges(serviceName, servicePath, SERVICE_METADATA);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> providerServiceMap;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>1️⃣：根据 <code>appKey</code> 和 <code>groupName</code> 从 zk 中查询注册的所有服务节点</p>
+<p>2️⃣：根据 <code>serviceName</code> 获取该服务下的所有节点信息</p>
+<p>3️⃣：使用 <code>pathToProducer</code> 将 zk 的 path 信息，转换成 <code>Producer</code> 对象</p>
+<p>4️⃣：将节点信息缓存到本地</p>
+<p>5️⃣：和服务提供方注册类似，订阅服务下方节点变化，然后刷新本地 <code>Map</code></p>
+<h3 id="getServiceProducer-服务消费方获取服务节点"><a href="#getServiceProducer-服务消费方获取服务节点" class="headerlink" title="getServiceProducer 服务消费方获取服务节点"></a>getServiceProducer 服务消费方获取服务节点</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> List&lt;Producer&gt; <span class="title function_">getServiceProducer</span><span class="params">(String serviceName, String methodName)</span> &#123;</span><br><span class="line">        List&lt;Producer&gt; producers = SERVICE_METADATA.get(serviceName);</span><br><span class="line">        <span class="type">return</span> <span class="variable">producers</span> <span class="operator">=</span>= <span class="literal">null</span> ? <span class="literal">null</span> :</span><br><span class="line">                producers.stream().filter(producer -&gt;</span><br><span class="line">                        producer.getMethod() != <span class="literal">null</span> &amp;&amp;</span><br><span class="line">                                producer.getMethod().getName().equals(methodName)).collect(Collectors.toList());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的实现代码就非常简单了，只需要遍历本地缓存的 SERVICE_METADATA 对象即可</p>
+<p>由于其他方法的操作都是对本地缓存 <code>Map</code> 的操作，所以这里就不再详细展开了</p>
+<p>到这里，已经完成了注册中心最重要方法编写，处理服务提供方的服务注册，和服务消费放的服务节点订阅。</p>
+<p>下一章我们将完成服务提供方节点信息的注册和 <code>Netty</code> 消息的处理。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/11/27-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%20RPC%20%E6%A1%86%E6%9E%B6%20(%E4%B8%80)/" rel="prev" title="如何开发一个自己的 RPC 框架 (一)">
+                  <i class="fa fa-chevron-left"></i> 如何开发一个自己的 RPC 框架 (一)
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simon</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.13.8/dist/mermaid.min.js","integrity":"sha256-QmSAc2kIaUjleIJ46X7qPW2zrpCbXlMz3YIGgWpQ1Jo="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
