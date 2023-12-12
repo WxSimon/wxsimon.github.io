@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.simoncode.top","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.9.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="写在前面：本文参考了开源项目 https:&#x2F;&#x2F;github.com&#x2F;MIracleCczs&#x2F;simple-rpc，其中大部分代码参考了该项目，本章主要从客户端的调用出发，讲讲一个 RPC 框架的实现在客户端测需要实现那些功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何开发一个自己的 RPC 框架 (一)">
+<meta property="og:url" content="http://blog.simoncode.top/2023/12/11/27-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%20RPC%20%E6%A1%86%E6%9E%B6%20(%E4%B8%80)/index.html">
+<meta property="og:site_name" content="Simon">
+<meta property="og:description" content="写在前面：本文参考了开源项目 https:&#x2F;&#x2F;github.com&#x2F;MIracleCczs&#x2F;simple-rpc，其中大部分代码参考了该项目，本章主要从客户端的调用出发，讲讲一个 RPC 框架的实现在客户端测需要实现那些功能">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-12-11T08:10:59.000Z">
+<meta property="article:modified_time" content="2023-12-12T06:01:56.753Z">
+<meta property="article:author" content="Simon">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="框架">
+<meta property="article:tag" content="Rpc">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.simoncode.top/2023/12/11/27-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%20RPC%20%E6%A1%86%E6%9E%B6%20(%E4%B8%80)/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://blog.simoncode.top/2023/12/11/27-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%20RPC%20%E6%A1%86%E6%9E%B6%20(%E4%B8%80)/","path":"2023/12/11/27-如何开发一个自己的 RPC 框架 (一)/","title":"如何开发一个自己的 RPC 框架 (一)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>如何开发一个自己的 RPC 框架 (一) | Simon</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Simon</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RPC-%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">RPC 的定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84-RPC-%E6%A1%86%E6%9E%B6%E6%98%AF%E5%A6%82%E4%BD%95%E7%BB%84%E6%88%90%E7%9A%84"><span class="nav-number">2.</span> <span class="nav-text">一个简单的 RPC 框架是如何组成的?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E8%BF%9C%E7%A8%8B%E6%96%B9%E6%B3%95%E7%9A%84%E8%B0%83%E7%94%A8%E6%98%AF%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%9A%84%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">一个远程方法的调用是如何实现的？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E7%A1%80%E6%8E%A5%E5%8F%A3%E5%AE%9A%E4%B9%89"><span class="nav-number">4.</span> <span class="nav-text">基础接口定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%8F%91%E8%B5%B7%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8"><span class="nav-number">5.</span> <span class="nav-text">客户端发起服务调用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B3%A8%E8%A7%A3%E5%AE%9A%E4%B9%89"><span class="nav-number">5.1.</span> <span class="nav-text">客户端注解定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="nav-number">5.2.</span> <span class="nav-text">客户端初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%B3%A8%E5%86%8C"><span class="nav-number">5.3.</span> <span class="nav-text">客户端服务注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E4%BE%9D%E8%B5%96%E7%9A%84%E6%B3%A8%E5%85%A5"><span class="nav-number">5.4.</span> <span class="nav-text">对象依赖的注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%9C%8D%E5%8A%A1%E8%8A%82%E7%82%B9%EF%BC%8C%E9%A2%84%E5%88%9B%E5%BB%BA-Netty-%E8%BF%9E%E6%8E%A5"><span class="nav-number">5.5.</span> <span class="nav-text">查询服务节点，预创建 Netty 连接</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Simon</p>
+  <div class="site-description" itemprop="description">Hello World !</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://blog.simoncode.top/2023/12/11/27-%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%20RPC%20%E6%A1%86%E6%9E%B6%20(%E4%B8%80)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Simon">
+      <meta itemprop="description" content="Hello World !">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Simon">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          如何开发一个自己的 RPC 框架 (一)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">Posted on</span>
+
+      <time title="Created: 2023-12-11 16:10:59" itemprop="dateCreated datePublished" datetime="2023-12-11T16:10:59+08:00">2023-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">Edited on</span>
+      <time title="Modified: 2023-12-12 14:01:56" itemprop="dateModified" datetime="2023-12-12T14:01:56+08:00">2023-12-12</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>写在前面：本文参考了开源项目 <a target="_blank" rel="noopener" href="https://github.com/MIracleCczs/simple-rpc%EF%BC%8C%E5%85%B6%E4%B8%AD%E5%A4%A7%E9%83%A8%E5%88%86%E4%BB%A3%E7%A0%81%E5%8F%82%E8%80%83%E4%BA%86%E8%AF%A5%E9%A1%B9%E7%9B%AE%EF%BC%8C%E6%9C%AC%E7%AB%A0%E4%B8%BB%E8%A6%81%E4%BB%8E%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%9A%84%E8%B0%83%E7%94%A8%E5%87%BA%E5%8F%91%EF%BC%8C%E8%AE%B2%E8%AE%B2%E4%B8%80%E4%B8%AA">https://github.com/MIracleCczs/simple-rpc，其中大部分代码参考了该项目，本章主要从客户端的调用出发，讲讲一个</a> RPC 框架的实现在客户端测需要实现那些功能</p>
+<span id="more"></span>
+
+<h2 id="RPC-的定义"><a href="#RPC-的定义" class="headerlink" title="RPC 的定义"></a>RPC 的定义</h2><p>可以参考 wiki: <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%81%A0%E7%A8%8B%E9%81%8E%E7%A8%8B%E8%AA%BF%E7%94%A8">https://zh.wikipedia.org/wiki/遠程過程調用</a></p>
+<h2 id="一个简单的-RPC-框架是如何组成的"><a href="#一个简单的-RPC-框架是如何组成的" class="headerlink" title="一个简单的 RPC 框架是如何组成的?"></a>一个简单的 RPC 框架是如何组成的?</h2><p>一个基础的 RPC 框架，需要包含三大部分：1. 注册中心 2.服务提供方 3.服务消费方</p>
+<pre class="mermaid">graph LR
+注册中心 --> 服务提供方
+注册中心 --> 服务消费方</pre>
+
+<p>从上图可以看出，服务提供方和消费方都需要和注册中心通信</p>
+<h2 id="一个远程方法的调用是如何实现的？"><a href="#一个远程方法的调用是如何实现的？" class="headerlink" title="一个远程方法的调用是如何实现的？"></a>一个远程方法的调用是如何实现的？</h2><pre class="mermaid">stateDiagram-v2
+    [*] --> 客户端发起服务调用
+    客户端发起服务调用 --> 根据类名+方法名查询服务节点(Producer)
+    根据类名+方法名查询服务节点(Producer) --> 根据节点获取本地Netty连接(channel)
+    根据节点获取本地Netty连接(channel) --> 向服务方发送调用请求(NettyRequest)
+    向服务方发送调用请求(NettyRequest) --> 服务方接收请求根据类名进行反射调用
+    服务方接收请求根据类名进行反射调用 --> 根据方法返回值构造返回结果(NettyResponse)
+    根据方法返回值构造返回结果(NettyResponse) --> 客户端获取返回结果(调用结束)
+    客户端获取返回结果(调用结束) --> [*]</pre>
+
+<p>下面，我们将根据上面流程图，一步步进行讲解。为了方便更加清楚的讲清整个逻辑，我们从实际的业务需求出发。</p>
+<p><strong>需求：</strong></p>
+<p>存在服务提供方 Producer(后面统称服务端)，提供方法 <code>get</code>   </p>
+<p>存在服务消费方 Consumer(后面统称客户端),需要调用 Producer 中的 <code>get</code> 方法</p>
+<pre class="mermaid">sequenceDiagram
+    客户端 ->>服务端: get 方法调用
+    服务端 ->>客户端: 返回 get 方法执行结果</pre>
+
+<h2 id="基础接口定义"><a href="#基础接口定义" class="headerlink" title="基础接口定义"></a>基础接口定义</h2><p>定义 <code>UserService</code> 接口，接口内包含 <code>get</code>  方法 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">UserService</span> &#123;</span><br><span class="line">    String <span class="title function_">get</span><span class="params">(String username)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="客户端发起服务调用"><a href="#客户端发起服务调用" class="headerlink" title="客户端发起服务调用"></a>客户端发起服务调用</h2><h3 id="客户端注解定义"><a href="#客户端注解定义" class="headerlink" title="客户端注解定义"></a>客户端注解定义</h3><p>客户端如何才能够像调用本地方法一样调用远程服务呢？RPC 框架就是用来解决这个问题。我们一般本地方法的调用都是采用 </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> UserService userService;</span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>Spring</code> 依赖注入的方式，将需要用到的方法注入到调用对象中，那么我们 RPC 调用能不能也采用这种形式呢？答案当然是可以的。那么为了实现上面的需求，我们最简单的办法就是自定义一个注解 <code>RpcClient</code> </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(&#123;ElementType.FIELD&#125;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> RpcClient &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注解定义完成后，我们就应该考虑注解中需要设置那些属性呢？</p>
+<p>那么冒出来的第一个问题就是：客户端如何知道是调用的那个远程服务呢？这时我们就需要设置第一个属性 <code>remoteAppKey</code> 服务的唯一标识，通过 <code>remoteAppKey</code> 客户端可以轻松地在注册中心找到目标服务。</p>
+<p>这个时候又会有第二个疑问，如果一个服务多个版本如何处理呢？比如进行灰度升级等操作的时，那么这个时候就需要第二个参数 <code>groupName</code> 找到具体服务下的具体分组</p>
+<p>剩余的参数就比较简单了，完成的参数配置如下:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 服务接口:匹配从注册中心获取到本地的服务提供者，得到服务提供者列表，再根据负载均衡策略选取一个发起服务调用</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> Class&lt;?&gt; targetItf() <span class="keyword">default</span> Object.class;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 超时时间：服务调用超时时间</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="type">long</span> <span class="title function_">timeout</span><span class="params">()</span> <span class="keyword">default</span> <span class="number">3000</span> * <span class="number">10L</span>;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 调用者线程数</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> <span class="type">int</span> <span class="title function_">consumeThreads</span><span class="params">()</span> <span class="keyword">default</span> <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 服务提供者唯一标识</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> String <span class="title function_">remoteAppKey</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment">  * 服务分组组名</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line"> String <span class="title function_">groupName</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;default&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="客户端初始化"><a href="#客户端初始化" class="headerlink" title="客户端初始化"></a>客户端初始化</h3><p>为了实现类似 <code>@Autowired</code> 的功能，框架需要在 <code>Bean</code> 初始化之时，将所有被 <code>RpcClient</code> 注解的对象进行依赖注入，那么如何实现这个功能呢？ <code>Spring</code> 的 <strong><code>InstantiationAwareBeanPostProcessor</code></strong> 接口，可以在 Bean 的实例化的各个阶段执行自定义逻辑。定义一个 <code>ConsumerAnnotaionBean</code> 方法，实现 <code>InstantiationAwareBeanPostProcessor</code> 接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConsumerAnnotaionBean</span> <span class="keyword">implements</span> <span class="title class_">InstantiationAwareBeanPostProcessor</span> &#123;</span><br><span class="line">		...其他方法省略</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> PropertyValues <span class="title function_">postProcessProperties</span><span class="params">(PropertyValues pvs, Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主要实现接口的 <code>postProcessProperties</code> 方法，设置 Bean 对象的属性值</p>
+<p>进行具体代码编写之前，我们需要先理清楚这里需要实现那些目的：</p>
+<ol>
+<li>客户端服务注册(监控目的)</li>
+<li>对象依赖的注入</li>
+<li>查询服务节点，预创建 Netty 连接</li>
+</ol>
+<p>好了，理清楚完需求之后，我们便开始对应的逻辑编写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> PropertyValues <span class="title function_">postProcessProperties</span><span class="params">(PropertyValues pvs, Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException &#123;</span><br><span class="line">        Class&lt;?&gt; beanClass = bean.getClass();</span><br><span class="line">        <span class="comment">// 依赖注入的服务</span></span><br><span class="line">        Field[] fields = beanClass.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            <span class="type">RpcClient</span> <span class="variable">rpcClient</span> <span class="operator">=</span> field.getAnnotation(RpcClient.class);</span><br><span class="line">            <span class="keyword">if</span> (rpcClient == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p> 根据初始化的 <code>bean</code> 获取对象中的所有参数，然后使用 <code>getAnnotation(RpcClient.class);</code> 判断参数是否被 <code>RpcClient</code> 所注解</p>
+<h3 id="客户端服务注册"><a href="#客户端服务注册" class="headerlink" title="客户端服务注册"></a>客户端服务注册</h3><p>这一步的目的是为了在注册中心中记录消费者信息，方便后续监控，所以这一步相对来说非常简单，只需要构造客户端信息然后提交到注册中心即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 构造消费者对象</span></span><br><span class="line"><span class="type">Consumer</span> <span class="variable">consumer</span> <span class="operator">=</span> Consumer</span><br><span class="line">                    .builder()</span><br><span class="line">                    .groupName(rpcClient.groupName())</span><br><span class="line">                    .remoteAppKey(rpcClient.remoteAppKey())</span><br><span class="line">                    .targetItf(targetItf)</span><br><span class="line">                    .build();</span><br><span class="line"><span class="comment">// 注册中心注册消费者</span></span><br><span class="line">registerCenter.registerConsumer(consumer);</span><br></pre></td></tr></table></figure>
+
+<h3 id="对象依赖的注入"><a href="#对象依赖的注入" class="headerlink" title="对象依赖的注入"></a>对象依赖的注入</h3><p>同样的，我们先梳理一下这里的需求。我们需要实现一个动态代理，在方法调用时，根据方法调用名+类名获取远程服务提供方的节点信息，然后构造一个 <code>NettyRequest</code> 信息，发送到服务方，最后需要接收服务放返回的 <code>NettyResponse</code> 解析成方法的返回值进行返回</p>
+<pre class="mermaid">stateDiagram-v2
+    [*] --> 根据类名+方法名获取节点_涉及节点负载均衡
+    根据类名+方法名获取节点_涉及节点负载均衡 --> 根据节点Ip和端口获取Netty的Channel
+    根据节点Ip和端口获取Netty的Channel --> 发送NettyRequest请求携带方法参数
+    发送NettyRequest请求携带方法参数 --> 获取服务端详情结果(NettyResponse)
+    获取服务端详情结果(NettyResponse) --> 反序列化成方法的出参
+    反序列化成方法的出参 --> 方法反射/远程调用完成
+    方法反射/远程调用完成 --> [*]</pre>
+
+<p>好了，我们已经理清楚了上面整体流程，那么就开始具体的代码编写吧</p>
+<p>首先，定义一个对象 <code>ClientProxyBeanFactory</code> 实现 <code>InvocationHandler</code> 接口</p>
+<p>主要是实现接口的 <code>invoke</code> 方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>invoke</code> 方法中，需要根据类名+方法名从注册中心中获取可用的节点，那么具体代理的类这个时候就需要从对象实例化中传入，所以我们在定义 <code>ClientProxyBeanFactory</code> 时，需要定义几个成员变量</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ClientProxyBeanFactory</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用连接池(Netty 请求)</span></span><br><span class="line">    <span class="keyword">private</span> ExecutorService executorService;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 目标代理类</span></span><br><span class="line">    <span class="keyword">private</span> Class&lt;?&gt; targetItf;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 超时</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">long</span> timeout;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用线程数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> consumeThreads;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对象初始化的时候，需要设置成员变量的值</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> ClientProxyBeanFactory instance;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ClientProxyBeanFactory</span><span class="params">(Class&lt;?&gt; targetItf, <span class="type">long</span> timeout, <span class="type">int</span> consumeThreads)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.executorService = <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(consumeThreads, consumeThreads,</span><br><span class="line">                <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                <span class="keyword">new</span> <span class="title class_">LinkedBlockingQueue</span>&lt;&gt;(), <span class="keyword">new</span> <span class="title class_">ThreadFactoryBuilder</span>()</span><br><span class="line">                .setNameFormat(<span class="string">&quot;simple-rpc-%d&quot;</span>).build(), <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy());</span><br><span class="line"></span><br><span class="line">        <span class="built_in">this</span>.targetItf = targetItf;</span><br><span class="line">        <span class="built_in">this</span>.timeout = timeout;</span><br><span class="line">        <span class="built_in">this</span>.consumeThreads = consumeThreads;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获取代理对象</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">getProxy</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;targetItf&#125;, <span class="built_in">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ClientProxyBeanFactory <span class="title function_">getInstance</span><span class="params">(Class&lt;?&gt; targetItf, <span class="type">long</span> timeout, <span class="type">int</span> consumeThreads)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">null</span> == instance) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (ClientProxyBeanFactory.class) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="literal">null</span> == instance) &#123;</span><br><span class="line">                    instance = <span class="keyword">new</span> <span class="title class_">ClientProxyBeanFactory</span>(targetItf, timeout, consumeThreads);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>完成上述成员变量赋值后，便可以开始从注册中心中获取服务节点了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ConsumerAnnotaionBean.class</span></span><br><span class="line"><span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">				<span class="comment">// 代理 className</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">serviceName</span> <span class="operator">=</span> targetItf.getName();</span><br><span class="line">				<span class="comment">// 注册中心服务</span></span><br><span class="line">        <span class="type">IRegisterCenter</span> <span class="variable">registerCenter</span> <span class="operator">=</span> IRegisterCenterZkImpl.getInstance();</span><br><span class="line">				<span class="comment">// 根据 serviceName + methodName 获取可以使用的节点</span></span><br><span class="line">        List&lt;Producer&gt; producerList = registerCenter.getServiceProducer(serviceName, method.getName());</span><br><span class="line">				...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>获取到服务节点后，这里可以根据设置的负载均衡策略获取本次使用的节点信息，假设这里采用随机获取的方法获取得到节点 <code>Producer</code></p>
+<p><strong>开启 Netty 连接，进行消息收发送</strong></p>
+<p>拿到了 <code>Producer</code> 就意味着我们可以获取到远程服务 Netty 的 ip + port 信息了，这个时候就可以建立远程服务连接了。但是这里存在一个优化逻辑，就是如果我们每次都是方法调用时再去建立链接，那么建立连接将会是一个非常耗时的操作，但是如果我们提前根据 ip + port 建立一个 <code>Channel</code> 池，方法调用时只需要从连接池中获取 <code>Channel</code> ，那么服务的效率是不是会大大提高了？</p>
+<pre class="mermaid">flowchart TD
+    A[(Ip+port获取本地缓存Channel)] --> B{是否存在 Channel?}
+    B -->|存在缓存信息| C[队列获取 Channel]
+    B ---->|不存在缓存信息| D[建立连接缓存到本地]
+    D --> B
+    C --> E[消息发送结束后将 Channel 返回到队列]</pre>
+
+<p>基于上面的逻辑，我们需要实现一个 <code>NettyChannelPoolFactory</code> 用来缓存客户端的 <code>Netty</code> 的请求缓存，同时对外提供两个方法: <code>acquire</code> 获取 Channel 信息 <code>release</code> 释放 Channel 信息</p>
+<p>具体实现代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NettyChannelPoolFactory</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">NettyChannelPoolFactory</span> <span class="variable">CHANNEL_POOL_FACTORY</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NettyChannelPoolFactory</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 连接池缓存 key 为服务提供者地址，value为Netty Channel阻塞队列</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;InetSocketAddress, ArrayBlockingQueue&lt;Channel&gt;&gt; CHANNEL_POOL_MAP = Maps.newConcurrentMap();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化Netty Channel阻塞队列的长度，该值为可配置信息</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Integer</span> <span class="variable">CHANNEL_CONNECT_SIZE</span> <span class="operator">=</span> <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> NettyChannelPoolFactory <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> CHANNEL_POOL_FACTORY;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化 netty 连接池</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">initChannelFactory</span><span class="params">(List&lt;Producer&gt; producerNodeList)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (Producer producer : producerNodeList) &#123;</span><br><span class="line">            <span class="type">InetSocketAddress</span> <span class="variable">address</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(producer.getIp(), producer.getPort());</span><br><span class="line">            <span class="keyword">while</span> (CHANNEL_POOL_MAP.get(address) == <span class="literal">null</span> || CHANNEL_POOL_MAP.get(address).size() &lt; CHANNEL_CONNECT_SIZE) &#123;</span><br><span class="line">                ArrayBlockingQueue&lt;Channel&gt; channels = CHANNEL_POOL_MAP.get(address);</span><br><span class="line">                <span class="keyword">if</span> (channels == <span class="literal">null</span> || channels.size() &lt; CHANNEL_CONNECT_SIZE) &#123;</span><br><span class="line">                    <span class="comment">// 初始化 Netty Channel 阻塞队列</span></span><br><span class="line">                    <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">                    <span class="keyword">while</span> (channel == <span class="literal">null</span>) &#123;</span><br><span class="line">                        channel = registerChannel(address);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (channels == <span class="literal">null</span>) &#123;</span><br><span class="line">                        channels = <span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(CHANNEL_CONNECT_SIZE);</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="type">boolean</span> <span class="variable">offer</span> <span class="operator">=</span> channels.offer(channel);</span><br><span class="line">                    <span class="keyword">if</span> (!offer) &#123;</span><br><span class="line">                        log.debug(<span class="string">&quot;channelArrayBlockingQueue fail&quot;</span>);</span><br><span class="line"></span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        CHANNEL_POOL_MAP.put(address, channels);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据 address 获取客户端队列</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> ArrayBlockingQueue&lt;Channel&gt; <span class="title function_">acquire</span><span class="params">(InetSocketAddress address)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> CHANNEL_POOL_MAP.get(address);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用完成之后，将 channel 放回到 阻塞队列</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">release</span><span class="params">(ArrayBlockingQueue&lt;Channel&gt; queue, Channel channel, InetSocketAddress address)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (queue == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 回收之前判断channel 是否可用</span></span><br><span class="line">        <span class="keyword">if</span> (channel == <span class="literal">null</span> || !channel.isOpen() || !channel.isActive() || !channel.isWritable()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (channel != <span class="literal">null</span>) &#123;</span><br><span class="line">                channel.deregister().syncUninterruptibly().awaitUninterruptibly();</span><br><span class="line">                channel.closeFuture().syncUninterruptibly().awaitUninterruptibly();</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">while</span> (channel == <span class="literal">null</span>) &#123;</span><br><span class="line">                    channel = registerChannel(address);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        queue.offer(channel);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 注册 netty 客户端</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> Channel <span class="title function_">registerChannel</span><span class="params">(InetSocketAddress address)</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">EventLoopGroup</span> <span class="variable">group</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">NioEventLoopGroup</span>(<span class="number">10</span>);</span><br><span class="line">            <span class="type">Bootstrap</span> <span class="variable">bootstrap</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Bootstrap</span>();</span><br><span class="line">            bootstrap.remoteAddress(address);</span><br><span class="line">            bootstrap.group(group)</span><br><span class="line">                    .channel(NioSocketChannel.class)</span><br><span class="line">                    .option(ChannelOption.TCP_NODELAY, <span class="literal">true</span>)</span><br><span class="line">                    .handler(<span class="keyword">new</span> <span class="title class_">ChannelInitializer</span>&lt;SocketChannel&gt;() &#123;</span><br><span class="line">                        <span class="meta">@Override</span></span><br><span class="line">                        <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">initChannel</span><span class="params">(SocketChannel ch)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">                            <span class="comment">// 注册Netty编码器</span></span><br><span class="line">                            ch.pipeline().addLast(<span class="keyword">new</span> <span class="title class_">NettyEncoderHandler</span>());</span><br><span class="line">                            <span class="comment">// 注册Netty解码器</span></span><br><span class="line">                            ch.pipeline().addLast(<span class="keyword">new</span> <span class="title class_">NettyDecoderHandler</span>(NettyResponse.class));</span><br><span class="line">                            <span class="comment">// 注册客户端业务处理逻辑Handler</span></span><br><span class="line">                            ch.pipeline().addLast(<span class="keyword">new</span> <span class="title class_">NettyHandlerClient</span>());</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="type">ChannelFuture</span> <span class="variable">channelFuture</span> <span class="operator">=</span> bootstrap.connect().sync();</span><br><span class="line">            <span class="keyword">final</span> <span class="type">Channel</span> <span class="variable">channel</span> <span class="operator">=</span> channelFuture.channel();</span><br><span class="line">            <span class="keyword">final</span> <span class="type">CountDownLatch</span> <span class="variable">countDownLatch</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CountDownLatch</span>(<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">final</span> List&lt;Boolean&gt; isSuccessHolder = Lists.newArrayListWithCapacity(<span class="number">1</span>);</span><br><span class="line">            <span class="comment">// 监听channel是否建立成功</span></span><br><span class="line">            channelFuture.addListener(future -&gt; &#123;</span><br><span class="line">                <span class="keyword">if</span> (future.isSuccess()) &#123;</span><br><span class="line">                    isSuccessHolder.add(Boolean.TRUE);</span><br><span class="line"></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="comment">// 如果建立失败，保存建立失败标记</span></span><br><span class="line">                    log.error(<span class="string">&quot;registerChannel fail , &#123;&#125;&quot;</span>, future.cause().getMessage());</span><br><span class="line">                    isSuccessHolder.add(Boolean.FALSE);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                countDownLatch.countDown();</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            countDownLatch.await();</span><br><span class="line">            <span class="comment">// 如果Channel建立成功，返回新建的Channel</span></span><br><span class="line">            <span class="keyword">if</span> (Boolean.TRUE.equals(isSuccessHolder.get(<span class="number">0</span>))) &#123;</span><br><span class="line">                <span class="keyword">return</span> channel;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            Thread.currentThread().interrupt();</span><br><span class="line">            log.error(<span class="string">&quot;registerChannel fail&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>NettyChannelPoolFactory</code> 对象中还定义了一个方法 <code>registerChannel</code> 接收 <code>InetSocketAddress</code> 的入参，返回值为 <code>Channel</code> 。方法中主要根据传入的 <code>address</code> 信息，创建了 <code>Netty</code> 连接，设置了序列化和反序列化的编解码器，然后增加了一个 <code>NettyHandlerClient</code> 的客户端消息处理器。最后将初始化好的 <code>Channel</code> 连接进行返回</p>
+<p>有了上面的 <code>NettyChannelPoolFactory</code> ，便可以将从注册中心获得到的 <code>Producer</code> 信息，根据 ip + port 获取 <code>Channel</code> ，从而进行 <code>NettyRequest</code> 消息的发送</p>
+<p><code>**NettyRequest</code> 消息的构造**</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">    <span class="comment">// 根据 serviceName + methodName 获取可以使用的节点</span></span><br><span class="line">List&lt;Producer&gt; producerList = registerCenter.getServiceProducer(serviceName, method.getName());</span><br><span class="line">    <span class="comment">// 直接取第0 个，这里可以采用负载均衡策略进行获取</span></span><br><span class="line">    <span class="type">Producer</span> <span class="variable">providerCopy</span> <span class="operator">=</span>producerList.get(<span class="number">0</span>) ;</span><br><span class="line">		<span class="comment">// NettyRequest 构造</span></span><br><span class="line"><span class="type">NettyRequest</span> <span class="variable">request</span> <span class="operator">=</span> NettyRequest.builder()</span><br><span class="line">								<span class="comment">// 服务节点信息</span></span><br><span class="line">                .producer(providerCopy)</span><br><span class="line">							<span class="comment">// 本次请求的唯一编号</span></span><br><span class="line">                .uniqueKey(UUID.randomUUID() + <span class="string">&quot;-&quot;</span> + Thread.currentThread().getId())</span><br><span class="line">							<span class="comment">// 请求超时时间</span></span><br><span class="line">                .invokeTimeout(timeout)</span><br><span class="line">							<span class="comment">// 请求方法名称</span></span><br><span class="line">                .invokeMethodName(method.getName())</span><br><span class="line">							<span class="comment">// 请求参数</span></span><br><span class="line">                .args(args)</span><br><span class="line">                .build();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>好了，现在 <code>NettyRequest</code>  和发送消息的 <code>Channel</code> 都已经有了，只需要将消息发送出去，然后接收消息然后序列成方法的出参即可。</p>
+<p>这里可以采用线程池的方式，进行 <code>Netty</code> 消息的发送和返回值的解码</p>
+<p>定义一个 <code>ClientServiceCallable</code> 集成自 <code>Callable&lt;NettyResponse&gt;</code> 带返回值的任务的接口</p>
+<p><code>Callable</code> 只有一个需要实现的方法 <code>call()</code> ,在该方法中，需要完成 1. 获取 <code>Channel</code> 对象 2. 发送请求 3. 结果值返回</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ClientServiceCallable</span> <span class="keyword">implements</span> <span class="title class_">Callable</span>&lt;NettyResponse&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Netty 通信管道</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> Channel channel;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 请求参数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> NettyRequest request;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> ClientServiceCallable <span class="title function_">of</span><span class="params">(NettyRequest request)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ClientServiceCallable</span>(request);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">ClientServiceCallable</span><span class="params">(NettyRequest request)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.request = request;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> NettyResponse <span class="title function_">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="type">InetSocketAddress</span> <span class="variable">inetSocketAddress</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">InetSocketAddress</span>(request.getProducer().getIp(), request.getProducer().getPort());</span><br><span class="line">    <span class="comment">// 获取本地缓存 Channel 队列</span></span><br><span class="line">    ArrayBlockingQueue&lt;Channel&gt; blockingQueue = NettyChannelPoolFactory.getInstance().acquire(inetSocketAddress);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (channel == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="comment">// 从队列中获取 Channel</span></span><br><span class="line">            channel = blockingQueue.take();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (channel == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;can&#x27;t find channel to resolve this request&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        log.error(<span class="string">&quot;client send request error&quot;</span>, e);</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        <span class="comment">// 请求结束，队列归还 Channel</span></span><br><span class="line">        NettyChannelPoolFactory.getInstance().release(blockingQueue, channel, inetSocketAddress);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码的 <code>call</code> 方法中，首先从本地缓存中获取到了 <code>Channel</code> 队列，然后在 <code>finally</code> 中将 <code>Channel</code> 归还到队列中。那么方法中剩下的逻辑就是发送 <code>NettyRequest</code> 请求，然后返回结果了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (channel == <span class="literal">null</span>) &#123;</span><br><span class="line">                channel = blockingQueue.take();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (channel == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;can&#x27;t find channel to resolve this request&quot;</span>);</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="number">1</span>️⃣ ClientResponseHolder.initResponseData(request.getUniqueKey());</span><br><span class="line"></span><br><span class="line">                <span class="number">2</span>️⃣<span class="keyword">while</span> (!channel.isOpen() || !channel.isActive() || !channel.isWritable()) &#123;</span><br><span class="line">                    log.warn(<span class="string">&quot;retry get new channel&quot;</span>);</span><br><span class="line">                    channel = blockingQueue.poll(request.getInvokeTimeout(), TimeUnit.MILLISECONDS);</span><br><span class="line">                    <span class="keyword">if</span> (channel == <span class="literal">null</span>) &#123;</span><br><span class="line">                        <span class="comment">// 若队列中没有可用的Channel，则重新注册一个Channel</span></span><br><span class="line">                        channel = NettyChannelPoolFactory.getInstance().registerChannel(inetSocketAddress);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 将本次调用的信息写入Netty通道，发起异步调用</span></span><br><span class="line">                <span class="number">3</span>️⃣ <span class="type">ChannelFuture</span> <span class="variable">channelFuture</span> <span class="operator">=</span> channel.writeAndFlush(request);</span><br><span class="line">                channelFuture.syncUninterruptibly();</span><br><span class="line">                <span class="comment">// 从返回结果容器中获取返回结果，同时设置等待超时时间为invokeTimeout</span></span><br><span class="line">                <span class="type">long</span> <span class="variable">invokeTimeout</span> <span class="operator">=</span> request.getInvokeTimeout();</span><br><span class="line">                <span class="number">4</span>️⃣ <span class="keyword">return</span> ClientResponseHolder.getValue(request.getUniqueKey(), invokeTimeout);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;client send request error&quot;</span>, e);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            NettyChannelPoolFactory.getInstance().release(blockingQueue, channel, inetSocketAddress);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
+<p>1️⃣ <strong>ClientResponseHolder 类</strong></p>
+<p><code>ClientResponseHolder.initResponseData(request.getUniqueKey());</code> 这里又增加了一个新的类<code>ClientResponseHolder</code>,那么这个类是干嘛的呢？</p>
+<p>由于消息的发送都是异步的形式，这里使用了 <code>Map&lt;String,NettyResponseWrapper&gt;</code> 进行本地数据缓存, <code>Map</code> 的 KEY 是 <code>NeettyRequest</code> 的 <code>uniqueKey</code> ，而 <code>Value</code> 就是 <code>Netty</code> 的返回结果，即是服务端执行之后的返回值</p>
+<p><code>ClientResponseHolder</code> 的具体实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ClientResponseHolder</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, NettyResponseWrapper&gt; RESPONSE_WRAPPER_MAP = Maps.newConcurrentMap();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ScheduledExecutorService executorService;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        executorService = <span class="keyword">new</span> <span class="title class_">ScheduledThreadPoolExecutor</span>(<span class="number">1</span>, <span class="keyword">new</span> <span class="title class_">RemoveExpireThreadFactory</span>(<span class="string">&quot;simple-rpc&quot;</span>, <span class="literal">false</span>));</span><br><span class="line">        <span class="comment">// 删除过期的数据</span></span><br><span class="line">        executorService.scheduleWithFixedDelay(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">for</span> (Map.Entry&lt;String, NettyResponseWrapper&gt; entry : RESPONSE_WRAPPER_MAP.entrySet()) &#123;</span><br><span class="line">                <span class="type">boolean</span> <span class="variable">expire</span> <span class="operator">=</span> entry.getValue().isExpire();</span><br><span class="line">                <span class="keyword">if</span> (expire) &#123;</span><br><span class="line">                    RESPONSE_WRAPPER_MAP.remove(entry.getKey());</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;, <span class="number">1</span>, <span class="number">20</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 初始化返回结果容器，requestUniqueKey唯一标识本次调用</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">initResponseData</span><span class="params">(String requestUniqueKey)</span> &#123;</span><br><span class="line">        RESPONSE_WRAPPER_MAP.put(requestUniqueKey, NettyResponseWrapper.of());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 将Netty调用异步返回结果放入阻塞队列</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">putResultValue</span><span class="params">(NettyResponse response)</span> &#123;</span><br><span class="line">        <span class="type">long</span> <span class="variable">currentTimeMillis</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="type">NettyResponseWrapper</span> <span class="variable">responseWrapper</span> <span class="operator">=</span> RESPONSE_WRAPPER_MAP.get(response.getUniqueKey());</span><br><span class="line">        responseWrapper.setResponseTime(currentTimeMillis);</span><br><span class="line">        responseWrapper.getResponseBlockingQueue().add(response);</span><br><span class="line">        RESPONSE_WRAPPER_MAP.put(response.getUniqueKey(), responseWrapper);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 从阻塞队列中获取异步返回结果</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> NettyResponse <span class="title function_">getValue</span><span class="params">(String requestUniqueKey, <span class="type">long</span> timeout)</span> &#123;</span><br><span class="line">        <span class="type">NettyResponseWrapper</span> <span class="variable">responseWrapper</span> <span class="operator">=</span> RESPONSE_WRAPPER_MAP.get(requestUniqueKey);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> responseWrapper.getResponseBlockingQueue().poll(timeout, TimeUnit.MILLISECONDS);</span><br><span class="line">            </span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            Thread.currentThread().interrupt();</span><br><span class="line">            log.error(<span class="string">&quot;get value error&quot;</span>, e);</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            RESPONSE_WRAPPER_MAP.remove(requestUniqueKey);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>initResponseData: 根据 <code>uniqueKey</code> 初始化 <code>Map</code></li>
+<li>putResultValue: 插入 <code>NettyResponse</code> 返回结果</li>
+<li>getValue: 根据 <code>uniqueKey</code> 获取结果</li>
+</ul>
+<p>同时定义了一个定时执行的队列，队列中根据 <code>responseTime</code> 判断消息是否过期进行内存数据清洗</p>
+<p>2️⃣ Channel 状态判断</p>
+<p>判断当前 <code>Netty</code> 通道状态，如果当前 <code>Channel</code> 不可用，则需要重新申请通道</p>
+<p>3️⃣ Netty 消息发送</p>
+<p>4️⃣ 从本地缓存中获取 Netty 返回结果</p>
+<p><strong>异步调用 Netty 服务，使用 <code>Future</code> 获取返回结果</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">    <span class="comment">// 根据 serviceName + methodName 获取可以使用的节点</span></span><br><span class="line">List&lt;Producer&gt; producerList = registerCenter.getServiceProducer(serviceName, method.getName());</span><br><span class="line">    <span class="comment">// 直接取第0 个，这里可以采用负载均衡策略进行获取</span></span><br><span class="line">    <span class="type">Producer</span> <span class="variable">providerCopy</span> <span class="operator">=</span>producerList.get(<span class="number">0</span>) ;</span><br><span class="line">		<span class="comment">// NettyRequest 构造</span></span><br><span class="line"><span class="type">NettyRequest</span> <span class="variable">request</span> <span class="operator">=</span> NettyRequest.builder()</span><br><span class="line">								<span class="comment">// 服务节点信息</span></span><br><span class="line">                .producer(providerCopy)</span><br><span class="line">							<span class="comment">// 本次请求的唯一编号</span></span><br><span class="line">                .uniqueKey(UUID.randomUUID() + <span class="string">&quot;-&quot;</span> + Thread.currentThread().getId())</span><br><span class="line">							<span class="comment">// 请求超时时间</span></span><br><span class="line">                .invokeTimeout(timeout)</span><br><span class="line">							<span class="comment">// 请求方法名称</span></span><br><span class="line">                .invokeMethodName(method.getName())</span><br><span class="line">							<span class="comment">// 请求参数</span></span><br><span class="line">                .args(args)</span><br><span class="line">                .build();</span><br><span class="line">        <span class="comment">// 发起异步调用,通过 NettyClient 发送请求</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Future&lt;NettyResponse&gt; responseFuture = executorService.submit(ClientServiceCallable.of(request));</span><br><span class="line">            <span class="type">NettyResponse</span> <span class="variable">response</span> <span class="operator">=</span> responseFuture.get(timeout, TimeUnit.MILLISECONDS);</span><br><span class="line">            <span class="keyword">if</span> (response != <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> response.getResult();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            log.error(<span class="string">&quot;send request error&quot;</span>, e);</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>到这里，我们就完成了 <code>ClientProxyBeanFactory</code> 代理对象的完整编写，现在就需要将初始化好的代理对象进行依赖注入</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ConsumerAnnotaionBean.class</span></span><br><span class="line"><span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">				<span class="comment">// 代理 className</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">serviceName</span> <span class="operator">=</span> targetItf.getName();</span><br><span class="line">				<span class="comment">// 注册中心服务</span></span><br><span class="line">        <span class="type">IRegisterCenter</span> <span class="variable">registerCenter</span> <span class="operator">=</span> IRegisterCenterZkImpl.getInstance();</span><br><span class="line">				<span class="comment">// 根据 serviceName + methodName 获取可以使用的节点</span></span><br><span class="line">        List&lt;Producer&gt; producerList = registerCenter.getServiceProducer(serviceName, method.getName());</span><br><span class="line">				<span class="comment">// 3.获取服务代理对象</span></span><br><span class="line">            Class&lt;?&gt; targetItf = rpcClient.targetItf();</span><br><span class="line">            <span class="keyword">if</span> (targetItf == Object.class) &#123;</span><br><span class="line">                targetItf = field.getType();</span><br><span class="line">           &#125;</span><br><span class="line">				<span class="comment">// 初始化代理对象</span></span><br><span class="line">				<span class="type">ClientProxyBeanFactory</span> <span class="variable">factory</span> <span class="operator">=</span> ClientProxyBeanFactory.getInstance(targetItf, rpcClient.timeout(), rpcClient.consumeThreads());</span><br><span class="line">            ReflectionUtils.makeAccessible(field);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">// 设置代理对象</span></span><br><span class="line">                field.set(bean, factory.getProxy());</span><br><span class="line"></span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;</span><br><span class="line">                log.error(<span class="string">&quot;ReferenceBeanPostProcessor post process properties error, beanName=&#123;&#125;&quot;</span>, beanName, e);</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;ReferenceBeanPostProcessor post process properties error, beanName=&quot;</span> + beanName, e);</span><br><span class="line">            &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>ClientProxyBeanFactory.getInstance</code> 获取到代理对象后，使用 <code>field.set</code> 方法进行执行赋值</p>
+<p>完成上述操作之后，当客户端执行 <code>get</code> 方法时，便会 <code>invoke</code> 到 <code>ClientProxyBeanFactory</code> 的 <code>invoke</code> 方法上，随后执行 <strong>开启 Netty 连接，进行消息收发送</strong> 内容，随后将服务方结果进行返回</p>
+<h3 id="查询服务节点，预创建-Netty-连接"><a href="#查询服务节点，预创建-Netty-连接" class="headerlink" title="查询服务节点，预创建 Netty 连接"></a>查询服务节点，预创建 Netty 连接</h3><p>这部分内容和第二步有所重叠，其核心逻辑如下：</p>
+<pre class="mermaid">sequenceDiagram
+    客户端->>注册中心: 1️⃣查询所有用到的服务
+    客户端->>服务提供方: 2️⃣预建立 Netty 请求，建立通道池</pre>
+
+<p>到这里，客户端的所有流程就都编写完成了。但是为了理清楚主要思路，文章中对负载均衡策略、序列化和反序列化等都只是一笔带过。这些也是一个 RPC 框架非常很重要的一部分。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E6%A1%86%E6%9E%B6/" rel="tag"># 框架</a>
+              <a href="/tags/Rpc/" rel="tag"># Rpc</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/02/07/26-2021%E6%80%BB%E7%BB%93/" rel="prev" title="2021总结">
+                  <i class="fa fa-chevron-left"></i> 2021总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Simon</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdn.jsdelivr.net/npm/mermaid@8.13.8/dist/mermaid.min.js","integrity":"sha256-QmSAc2kIaUjleIJ46X7qPW2zrpCbXlMz3YIGgWpQ1Jo="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
