@@ -86,19 +86,16 @@
   </entry>
   
   <entry>
-    <title></title>
+    <title>特行助手</title>
     <link href="http://blog.simoncode.top/2025/02/08/32-%E7%89%B9%E8%A1%8C%E5%8A%A9%E6%89%8B/"/>
     <id>http://blog.simoncode.top/2025/02/08/32-%E7%89%B9%E8%A1%8C%E5%8A%A9%E6%89%8B/</id>
-    <published>2025-02-08T01:46:23.173Z</published>
-    <updated>2025-02-08T02:20:37.882Z</updated>
+    <published>2025-02-07T16:00:00.000Z</published>
+    <updated>2025-05-13T05:50:05.758Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="特行助手"><a href="#特行助手" class="headerlink" title="特行助手"></a>特行助手</h1><p>“特行助手” 是一款基于 <a href="https://github.com/teslamate-org/teslamate">teslamate</a> 的出行记录查看工具。展示数据源基于 teslamate，使用前请确保已经部署好 teslamate 服务。</p><p><strong>截图:</strong></p><ul><li>出行列表</li></ul><p><img src="http://static.simoncode.top/picgo/2025-02-08_09-06_%E5%89%AF%E6%9C%AC.png"></p><ul><li><p>日期统计</p><p><img src="http://static.simoncode.top/picgo/20250208101722938.png"></p></li><li><p>单次行程详情</p></li></ul><p><img src="http://static.simoncode.top/picgo/2025-02-08_10-17_0_%E5%89%AF%E6%9C%AC.png"></p><ul><li><p>充电信息</p><p><img src="http://static.simoncode.top/picgo/20250208102024725.png"></p></li></ul><h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="Docker-部署-推荐"><a href="#Docker-部署-推荐" class="headerlink" title="Docker 部署(推荐)"></a>Docker 部署(推荐)</h3><h3 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h3>]]></content>
+    <content type="html"><![CDATA[<h1 id="特行助手"><a href="#特行助手" class="headerlink" title="特行助手"></a>特行助手</h1><p>“特行助手” 是一款基于 <a href="https://github.com/teslamate-org/teslamate">teslamate</a> 的出行记录查看工具。展示数据源基于 teslamate，使用前请确保已经部署好 teslamate 服务。</p><span id="more"></span><p><strong>截图:</strong></p><ul><li>出行列表</li></ul><p><img src="http://static.simoncode.top/picgo/2025-02-08_09-06_%E5%89%AF%E6%9C%AC.png"></p><ul><li><p>日期统计</p><p><img src="http://static.simoncode.top/picgo/20250208101722938.png"></p></li><li><p>单次行程详情</p></li></ul><p><img src="http://static.simoncode.top/picgo/2025-02-08_10-17_0_%E5%89%AF%E6%9C%AC.png"></p><ul><li><p>充电信息</p><p><img src="http://static.simoncode.top/picgo/20250208102024725.png"></p></li></ul><h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><h3 id="Docker-部署-推荐"><a href="#Docker-部署-推荐" class="headerlink" title="Docker 部署(推荐)"></a>Docker 部署(推荐)</h3><h3 id="本地部署"><a href="#本地部署" class="headerlink" title="本地部署"></a>本地部署</h3>]]></content>
     
     
-      
-      
-    <summary type="html">&lt;h1 id=&quot;特行助手&quot;&gt;&lt;a href=&quot;#特行助手&quot; class=&quot;headerlink&quot; title=&quot;特行助手&quot;&gt;&lt;/a&gt;特行助手&lt;/h1&gt;&lt;p&gt;“特行助手” 是一款基于 &lt;a href=&quot;https://github.com/teslamate-org/teslama</summary>
-      
+    <summary type="html">&lt;h1 id=&quot;特行助手&quot;&gt;&lt;a href=&quot;#特行助手&quot; class=&quot;headerlink&quot; title=&quot;特行助手&quot;&gt;&lt;/a&gt;特行助手&lt;/h1&gt;&lt;p&gt;“特行助手” 是一款基于 &lt;a href=&quot;https://github.com/teslamate-org/teslamate&quot;&gt;teslamate&lt;/a&gt; 的出行记录查看工具。展示数据源基于 teslamate，使用前请确保已经部署好 teslamate 服务。&lt;/p&gt;</summary>
     
     
     

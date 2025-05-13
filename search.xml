@@ -2667,9 +2667,11 @@ xmlHttp.send(“username=”xx”,password=”x”);//发送的内容
       </tags>
   </entry>
   <entry>
-    <title></title>
+    <title>特行助手</title>
     <url>/2025/02/08/32-%E7%89%B9%E8%A1%8C%E5%8A%A9%E6%89%8B/</url>
     <content><![CDATA[<h1 id="特行助手"><a href="#特行助手" class="headerlink" title="特行助手"></a>特行助手</h1><p>“特行助手” 是一款基于 <a href="https://github.com/teslamate-org/teslamate">teslamate</a> 的出行记录查看工具。展示数据源基于 teslamate，使用前请确保已经部署好 teslamate 服务。</p>
+<span id="more"></span>
+
 <p><strong>截图:</strong></p>
 <ul>
 <li>出行列表</li>
