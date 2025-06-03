@@ -3093,7 +3093,7 @@ xmlHttp.send(“username=”xx”,password=”x”);//发送的内容
   </entry>
   <entry>
     <title>（四） Redis 面试必问 15 题及详解</title>
-    <url>/2025/05/13/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/</url>
+    <url>/2025/05/14/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/</url>
     <content><![CDATA[<h1 id="Redis-面试必问-15-题及详解"><a href="#Redis-面试必问-15-题及详解" class="headerlink" title="Redis 面试必问 15 题及详解"></a>Redis 面试必问 15 题及详解</h1><blockquote>
 <p>本文汇总了 Redis 面试中最常被问到的 15 个核心问题，涵盖性能原理、高可用架构、持久化机制、分布式锁、缓存设计等多个维度</p>
 </blockquote>

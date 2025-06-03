@@ -22,12 +22,12 @@
 <meta name="description" content="Redis 面试必问 15 题及详解 本文汇总了 Redis 面试中最常被问到的 15 个核心问题，涵盖性能原理、高可用架构、持久化机制、分布式锁、缓存设计等多个维度">
 <meta property="og:type" content="article">
 <meta property="og:title" content="（四） Redis 面试必问 15 题及详解">
-<meta property="og:url" content="http://blog.simoncode.top/2025/05/13/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:url" content="http://blog.simoncode.top/2025/05/14/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/index.html">
 <meta property="og:site_name" content="Simon">
 <meta property="og:description" content="Redis 面试必问 15 题及详解 本文汇总了 Redis 面试中最常被问到的 15 个核心问题，涵盖性能原理、高可用架构、持久化机制、分布式锁、缓存设计等多个维度">
 <meta property="og:locale">
-<meta property="article:published_time" content="2025-05-13T02:18:14.000Z">
-<meta property="article:modified_time" content="2025-05-30T00:43:03.231Z">
+<meta property="article:published_time" content="2025-05-14T02:18:14.000Z">
+<meta property="article:modified_time" content="2025-06-03T00:42:57.819Z">
 <meta property="article:author" content="Simon">
 <meta property="article:tag" content="基础">
 <meta property="article:tag" content="技术">
@@ -35,11 +35,11 @@
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://blog.simoncode.top/2025/05/13/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/">
+<link rel="canonical" href="http://blog.simoncode.top/2025/05/14/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://blog.simoncode.top/2025/05/13/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/","path":"2025/05/13/36-Redis 面试必问 15 题及详解/","title":"（四） Redis 面试必问 15 题及详解"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://blog.simoncode.top/2025/05/14/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/","path":"2025/05/14/36-Redis 面试必问 15 题及详解/","title":"（四） Redis 面试必问 15 题及详解"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
 <title>（四） Redis 面试必问 15 题及详解 | Simon</title>
@@ -228,7 +228,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://blog.simoncode.top/2025/05/13/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/">
+    <link itemprop="mainEntityOfPage" href="http://blog.simoncode.top/2025/05/14/36-Redis%20%E9%9D%A2%E8%AF%95%E5%BF%85%E9%97%AE%2015%20%E9%A2%98%E5%8F%8A%E8%AF%A6%E8%A7%A3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -252,14 +252,14 @@
       </span>
       <span class="post-meta-item-text">Posted on</span>
 
-      <time title="Created: 2025-05-13 10:18:14" itemprop="dateCreated datePublished" datetime="2025-05-13T10:18:14+08:00">2025-05-13</time>
+      <time title="Created: 2025-05-14 10:18:14" itemprop="dateCreated datePublished" datetime="2025-05-14T10:18:14+08:00">2025-05-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Edited on</span>
-      <time title="Modified: 2025-05-30 08:43:03" itemprop="dateModified" datetime="2025-05-30T08:43:03+08:00">2025-05-30</time>
+      <time title="Modified: 2025-06-03 08:42:57" itemprop="dateModified" datetime="2025-06-03T08:42:57+08:00">2025-06-03</time>
     </span>
 
   
@@ -592,14 +592,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/05/13/34-Redis%20%E7%9A%84%E4%BA%94%E5%A4%A7%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="prev" title="（二）Redis 的五大核心数据结构">
-                  <i class="fa fa-chevron-left"></i> （二）Redis 的五大核心数据结构
+                <a href="/2025/05/13/35-Redis%20%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%B8%B8%E7%94%A8%E5%9C%BA%E6%99%AF%E5%AE%9E%E8%B7%B5/" rel="prev" title="（三） Redis 高级数据结构与常用场景实践">
+                  <i class="fa fa-chevron-left"></i> （三） Redis 高级数据结构与常用场景实践
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/05/13/35-Redis%20%E9%AB%98%E7%BA%A7%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E5%B8%B8%E7%94%A8%E5%9C%BA%E6%99%AF%E5%AE%9E%E8%B7%B5/" rel="next" title="（三） Redis 高级数据结构与常用场景实践">
-                  （三） Redis 高级数据结构与常用场景实践 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
